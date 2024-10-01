@@ -9,25 +9,23 @@ import javafx.scene.paint.Color;
 import java.util.List;
 import java.util.Map;
 
+import static game.labyrinthstudy.MainApplication.CELL_SIZE;
+import static game.labyrinthstudy.MainApplication.MAZE_SIZE;
+
 public class GameWindow extends StackPane {
 
-    private final Canvas mazeView;
-
     private final AdjacencyList adjacencyList;
-
-    private static final int CELL_SIZE = 20;
-    private static final int MAZE_SIZE = 30;
 
     public GameWindow(AdjacencyList maze) {
         this.adjacencyList = maze;
 
-        this.setBackground(Background.fill(Color.web("#1a1a1a")));
-        this.mazeView = new Canvas();
+        this.setBackground(Background.fill(Color.LIGHTGRAY));
+        Canvas mazeView = new Canvas(MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE);
 
-        GraphicsContext mazeGc = this.mazeView.getGraphicsContext2D();
+        GraphicsContext mazeGc = mazeView.getGraphicsContext2D();
         drawMaze(mazeGc);
 
-        this.getChildren().add(this.mazeView);
+        this.getChildren().add(mazeView);
     }
 
     private void drawMaze(GraphicsContext gc) {

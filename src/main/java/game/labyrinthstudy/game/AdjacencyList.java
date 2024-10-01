@@ -17,7 +17,7 @@ public class AdjacencyList {
         return adjacencyList;
     }
 
-    private AdjacencyList fromString(String input) {
+    public static AdjacencyList fromString(String input) {
         Map<Location, List<Location>> map = new HashMap<>();
 
         // Split the input string into lines
@@ -49,7 +49,7 @@ public class AdjacencyList {
         return new AdjacencyList(map);
     }
 
-    private Location parseLocation(String locationStr) {
+    private static Location parseLocation(String locationStr) {
         locationStr = locationStr.replace("(", "").replace(")", "");
         String[] coordinates = locationStr.split(", ");
         int col = Integer.parseInt(coordinates[0]);

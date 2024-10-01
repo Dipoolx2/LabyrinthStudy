@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
   mainModule = 'game.labyrinthstudy'
-  mainClass = 'game.labyrinthstudy.HelloApplication'
+  mainClass = 'game.labyrinthstudy.MainApplication'
 }
 
 javafx {
