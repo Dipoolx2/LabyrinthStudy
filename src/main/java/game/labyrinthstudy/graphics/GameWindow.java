@@ -1,5 +1,7 @@
-package game.labyrinthstudy.game;
+package game.labyrinthstudy.graphics;
 
+import game.labyrinthstudy.game.AdjacencyList;
+import game.labyrinthstudy.game.Location;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Background;
