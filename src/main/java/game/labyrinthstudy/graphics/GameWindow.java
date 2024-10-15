@@ -21,7 +21,7 @@ public class GameWindow extends StackPane {
     public GameWindow(AdjacencyList maze) {
         this.adjacencyList = maze;
 
-        this.setBackground(Background.fill(Color.LIGHTGRAY));
+        this.setBackground(Background.fill(Color.DARKGRAY));
         Canvas mazeView = new Canvas(MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE);
 
         GraphicsContext mazeGc = mazeView.getGraphicsContext2D();

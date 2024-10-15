@@ -1,10 +1,13 @@
 package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.AdjacencyList;
+import game.labyrinthstudy.game.GameLoop;
 import game.labyrinthstudy.graphics.ContainerPane;
+import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
 import game.labyrinthstudy.game.PlayerController;
 import game.labyrinthstudy.io.FileManager;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -19,10 +22,11 @@ public class MainApplication extends Application {
 
     public FileManager fileManager;
     private PlayerController playerController;
+    private AnimationTimer gameLoop;
 
     public static final int CELL_SIZE = 30;
     public static final int MAZE_SIZE = 30;
-    public static final int WIDTH = 1920, HEIGHT = 1080;
+    public static final int WIDTH = 1700, HEIGHT = 900;
 
     @Override
     public void start(Stage stage) {
@@ -34,17 +38,14 @@ public class MainApplication extends Application {
         // Init scene
         Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        AdjacencyList maze = getMaze("maze1.txt");
+        AdjacencyList maze = getMaze("maze2.txt");
         assert(maze != null);
 
         GameWindow gameWindow = new GameWindow(maze);
         ContainerPane containerPane = new ContainerPane(gameWindow);
+        GameLayerPane gameLayerPane = new GameLayerPane(containerPane);
 
-        containerPane.setBackground(Background.fill(Color.LIGHTGRAY));
-
-
-        root.getChildren().add(containerPane);
-
+        root.getChildren().add(gameLayerPane);
         scene.setRoot(root);
 
         // Set window properties
@@ -56,18 +57,28 @@ public class MainApplication extends Application {
         this.playerController = new PlayerController(containerPane);
         registerEvents(scene);
 
+        startMainLoop();
+
         stage.show();
     }
 
+    private void startMainLoop() {
+        // start game
+        gameLoop = new GameLoop(this);
+        gameLoop.start();
+    }
+
+    public void tick() {
+        playerController.tick();
+    }
+
     private AdjacencyList getMaze(final String fileName) {
-        AdjacencyList maze;
         try {
-            maze = fileManager.readAdjacencyListFromFile(fileName);
+            return fileManager.readAdjacencyListFromFile(fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Error: File with name is not found.");
             return null;
         }
-        return maze;
     }
 
     private void registerEvents(Scene scene) {
