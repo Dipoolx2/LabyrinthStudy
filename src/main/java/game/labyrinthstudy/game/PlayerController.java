@@ -45,6 +45,10 @@ public class PlayerController {
         this.playerY = location.getY() + 0.5;
     }
 
+    public boolean atLocation(Location location) {
+        return (int) this.playerX == location.getX() && (int) this.playerY == location.getY();
+    }
+
     public double getEffectiveVelX() {
         return velX * speedCorrectionMultiplier();
     }

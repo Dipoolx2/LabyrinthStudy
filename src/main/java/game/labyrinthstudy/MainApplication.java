@@ -1,11 +1,8 @@
 package game.labyrinthstudy;
 
-import game.labyrinthstudy.game.AdjacencyList;
-import game.labyrinthstudy.game.GameLoop;
-import game.labyrinthstudy.game.Maze;
+import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
-import game.labyrinthstudy.game.PlayerController;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -21,6 +18,8 @@ public class MainApplication extends Application {
     public FileManager fileManager;
     private PlayerController playerController;
     private AnimationTimer gameLoop;
+    private LocationListenerManager locationListenerManager;
+    private ProgramFlowManager programFlowManager;
 
     public static final int CELL_SIZE = 70;
     public static final int MAZE_SIZE = 30;
@@ -29,6 +28,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) {
         this.fileManager = new FileManager();
+        this.programFlowManager = new ProgramFlowManager();
 
         // Register canvas to root
         StackPane root = new StackPane();
@@ -54,6 +54,9 @@ public class MainApplication extends Application {
         this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
         this.playerController.teleport(maze.getStartLocation());
 
+        this.locationListenerManager = new LocationListenerManager(this.playerController);
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> programFlowManager.finishMaze(maze));
+
         registerEvents(scene);
 
         startMainLoop();
@@ -69,6 +72,7 @@ public class MainApplication extends Application {
 
     public void tick() {
         playerController.tick();
+        locationListenerManager.tick();
     }
 
     private Maze getMaze(final String fileName) {
