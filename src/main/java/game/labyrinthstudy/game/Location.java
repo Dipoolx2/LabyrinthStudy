@@ -11,6 +11,10 @@ public class Location {
         this.y = y;
     }
 
+    public Location move(AdjacencyList.Direction direction) {
+        return new Location(this.x + direction.dx, this.y + direction.dy);
+    }
+
     public int getX() {
         return x;
     }

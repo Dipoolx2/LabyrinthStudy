@@ -1,6 +1,8 @@
 package game.labyrinthstudy.game;
 
-import game.labyrinthstudy.graphics.ContainerPane;
+import game.labyrinthstudy.MainApplication;
+import game.labyrinthstudy.graphics.GameLayerPane;
+import game.labyrinthstudy.graphics.GameWindow;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,13 +13,16 @@ import java.util.Set;
 
 public class PlayerController {
 
-    private final double PLAYER_SPEED = 3;
-    private final ContainerPane view;
+    private final double PLAYER_SPEED = 2.3; // Cells per second
+    private final GameWindow gameView;
+    private final CollisionChecker collisionChecker;
 
     private double playerX, playerY, velX, velY;
 
-    public PlayerController(ContainerPane view) {
-        this.view = view;
+    public PlayerController(GameWindow view, AdjacencyList adjacencyList) {
+        this.gameView = view;
+
+        this.collisionChecker = new CollisionChecker(adjacencyList, this);
         this.keysPressed = new HashSet<>();
 
         this.velX = 0;
@@ -25,6 +30,19 @@ public class PlayerController {
 
         this.playerX = 0;
         this.playerY = 0;
+    }
+
+    public double getPlayerX() {
+        return playerX;
+    }
+
+    public double getPlayerY() {
+        return playerY;
+    }
+
+    public void teleport(Location location) {
+        this.playerX = location.getX() + 0.5;
+        this.playerY = location.getY() + 0.5;
     }
 
     public double getEffectiveVelX() {
@@ -37,12 +55,17 @@ public class PlayerController {
 
     public void tick() {
         updatePositions();
-        view.updateMazeOffset(playerX, playerY);
+        gameView.updateMazeOffset(playerX, playerY);
     }
 
     private void updatePositions() {
-        this.playerX += this.getEffectiveVelX();
-        this.playerY += this.getEffectiveVelY();
+        Map.Entry<Double, Double> finalDeltas
+                = this.collisionChecker.getLegalCoordinates(this.getEffectiveVelX(), this.getEffectiveVelY(),
+                                                 GameLayerPane.PL_RADIUS/MainApplication.CELL_SIZE);
+
+
+        this.playerX += finalDeltas.getKey();
+        this.playerY += finalDeltas.getValue();
         System.out.println(this.playerX + " " + this.playerY);
     }
 
@@ -51,7 +74,7 @@ public class PlayerController {
         if (currentVel == 0) {
             return 1.0; // Or some other default value when there's no movement
         }
-        return PLAYER_SPEED / Math.abs(currentVel);
+        return (PLAYER_SPEED/GameLoop.tps) / Math.abs(currentVel);
     }
 
     private final Set<KeyCode> keysPressed;
@@ -89,8 +112,10 @@ public class PlayerController {
         // Accumulate velocities based on currently pressed keys
         for (KeyCode key : keysPressed) {
             double[] direction = directionMap.get(key);
-            netX += direction[0] * PLAYER_SPEED;
-            netY += direction[1] * PLAYER_SPEED;
+            double offsetPerTick = PLAYER_SPEED / (double) GameLoop.tps;
+
+            netX += direction[0] * offsetPerTick;
+            netY += direction[1] * offsetPerTick;
         }
 
         this.velX = netX;

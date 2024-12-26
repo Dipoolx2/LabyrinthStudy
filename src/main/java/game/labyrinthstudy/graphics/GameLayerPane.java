@@ -1,7 +1,5 @@
 package game.labyrinthstudy.graphics;
 
-import game.labyrinthstudy.MainApplication;
-import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,22 +8,15 @@ import javafx.scene.shape.Circle;
 public class GameLayerPane extends StackPane {
 
     private final Circle PL_VIEW;
-    private final ContainerPane GAME_VIEW;
-
-    public static final double mazeCenterOffsetX = (double) MainApplication.WIDTH / 2;
-    public static final double mazeCenterOffsetY = (double) MainApplication.HEIGHT / 2;
-
+    private final GameWindow GAME_VIEW;
     private final Color PL_COLOR = Color.RED;
-    private final double PL_RADIUS = 4;
+    public static final double PL_RADIUS = 13;
 
-    public GameLayerPane(ContainerPane containerPane) {
+
+
+    public GameLayerPane(GameWindow gameWindow) {
         this.PL_VIEW = generatePlayerView();
-        this.GAME_VIEW = containerPane;
-
-        this.GAME_VIEW.setAlignment(Pos.CENTER);
-
-        this.GAME_VIEW.setTranslateX(mazeCenterOffsetX);
-        this.GAME_VIEW.setTranslateY(mazeCenterOffsetY);
+        this.GAME_VIEW = gameWindow;
 
         this.getChildren().add(GAME_VIEW);
         this.getChildren().add(PL_VIEW);

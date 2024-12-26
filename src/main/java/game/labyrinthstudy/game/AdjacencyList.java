@@ -1,9 +1,6 @@
 package game.labyrinthstudy.game;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AdjacencyList {
 
@@ -15,6 +12,37 @@ public class AdjacencyList {
 
     public Map<Location, List<Location>> getMap() {
         return adjacencyList;
+    }
+
+    public AdjacencyList getWallAdjacencyList() {
+        Map<Location, List<Location>> wallAdjacencyList = new HashMap<>();
+
+        for (Map.Entry<Location, List<Location>> entry : this.getMap().entrySet()) {
+            Location current = entry.getKey();
+            Set<Location> accessibleNeighbors = new HashSet<>(entry.getValue());
+
+            for (Direction direction : Direction.values()) {
+                Location neighbor = current.move(direction);
+
+                // If the neighbor is not accessible, it's a wall.
+                if (!accessibleNeighbors.contains(neighbor)) {
+                    wallAdjacencyList.computeIfAbsent(current, k -> new ArrayList<>()).add(neighbor);
+                }
+            }
+        }
+
+        return new AdjacencyList(wallAdjacencyList);
+    }
+
+    public enum Direction {
+        UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0);
+
+        public int dx;
+        public int dy;
+        Direction(int dx, int dy) {
+            this.dx = dx;
+            this.dy = dy;
+        }
     }
 
     public static AdjacencyList fromString(String input) {
@@ -49,7 +77,7 @@ public class AdjacencyList {
         return new AdjacencyList(map);
     }
 
-    private static Location parseLocation(String locationStr) {
+    public static Location parseLocation(String locationStr) {
         locationStr = locationStr.replace("(", "").replace(")", "");
         String[] coordinates = locationStr.split(", ");
         int col = Integer.parseInt(coordinates[0]);

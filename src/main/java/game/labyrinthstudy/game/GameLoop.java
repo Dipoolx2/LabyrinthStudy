@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 public class GameLoop extends AnimationTimer {
 
     private final MainApplication mainApp;
+    public static final long tps = 60;
 
     private long lastTick = 0;
     private long lastSecond = 0;
@@ -24,7 +25,6 @@ public class GameLoop extends AnimationTimer {
 
         // Check if enough time has passed for the next tick
         // Nanoseconds per tick
-        final long tps = 60;
         final long nsPerTick = 1000000000 / tps;
         if (now - lastTick >= nsPerTick) {
             this.mainApp.tick();

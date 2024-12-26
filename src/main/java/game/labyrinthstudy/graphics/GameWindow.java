@@ -2,9 +2,10 @@ package game.labyrinthstudy.graphics;
 
 import game.labyrinthstudy.game.AdjacencyList;
 import game.labyrinthstudy.game.Location;
+import game.labyrinthstudy.game.Maze;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -14,24 +15,56 @@ import java.util.Map;
 import static game.labyrinthstudy.MainApplication.CELL_SIZE;
 import static game.labyrinthstudy.MainApplication.MAZE_SIZE;
 
-public class GameWindow extends StackPane {
+public class GameWindow extends StackPane { // Singleton stack pane
+
+    private final double gameOffsetX = (double) (MAZE_SIZE * CELL_SIZE) /2;
+    private final double gameOffsetY = (double) (MAZE_SIZE * CELL_SIZE) /2;
+
+    public static final double WALL_WIDTH = 2;
 
     private final AdjacencyList adjacencyList;
+    private final Location startLocation, endLocation;
 
-    public GameWindow(AdjacencyList maze) {
-        this.adjacencyList = maze;
+    public GameWindow(Maze maze) {
+        this.adjacencyList = maze.getAdjacencyList();
+        this.startLocation = maze.getStartLocation();
+        this.endLocation = maze.getEndLocation();
 
-        this.setBackground(Background.fill(Color.DARKGRAY));
-        Canvas mazeView = new Canvas(MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE);
+        Canvas mazeWindow = new Canvas(MAZE_SIZE*CELL_SIZE, MAZE_SIZE*CELL_SIZE);
 
-        GraphicsContext mazeGc = mazeView.getGraphicsContext2D();
+        GraphicsContext mazeGc = mazeWindow.getGraphicsContext2D();
         drawMaze(mazeGc);
+        drawStartLocation(mazeGc);
+        drawEndLocation(mazeGc);
 
-        this.getChildren().add(mazeView);
+        this.getChildren().add(mazeWindow);
+    }
+
+    private void drawStartLocation(GraphicsContext gc) {
+        int x = this.startLocation.getX() * CELL_SIZE+CELL_SIZE/10;
+        int y = this.startLocation.getY() * CELL_SIZE+CELL_SIZE/10;
+
+        gc.setFill(Color.YELLOW.brighter());
+
+        gc.fillRect(x, y, CELL_SIZE/1.25, CELL_SIZE/1.25);
+    }
+
+    private void drawEndLocation(GraphicsContext gc) {
+        int x = this.endLocation.getX() * CELL_SIZE+CELL_SIZE/10;
+        int y = this.endLocation.getY() * CELL_SIZE+CELL_SIZE/10;
+
+        gc.setFill(Color.GREEN.brighter());
+
+        gc.fillRect(x, y, CELL_SIZE/1.25, CELL_SIZE/1.25);
+    }
+
+    public void updateMazeOffset(double playerX, double playerY) {
+        this.setTranslateX(this.gameOffsetX-playerX*CELL_SIZE);
+        this.setTranslateY(this.gameOffsetY-playerY*CELL_SIZE);
     }
 
     private void drawMaze(GraphicsContext gc) {
-        gc.setLineWidth(2);
+        gc.setLineWidth(WALL_WIDTH);
         for (Map.Entry<Location, List<Location>> entry : adjacencyList.getMap().entrySet()) {
             Location current = entry.getKey();
             List<Location> neighbors = entry.getValue();

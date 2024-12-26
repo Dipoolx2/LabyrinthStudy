@@ -2,7 +2,7 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.AdjacencyList;
 import game.labyrinthstudy.game.GameLoop;
-import game.labyrinthstudy.graphics.ContainerPane;
+import game.labyrinthstudy.game.Maze;
 import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
 import game.labyrinthstudy.game.PlayerController;
@@ -11,9 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -24,7 +22,7 @@ public class MainApplication extends Application {
     private PlayerController playerController;
     private AnimationTimer gameLoop;
 
-    public static final int CELL_SIZE = 30;
+    public static final int CELL_SIZE = 70;
     public static final int MAZE_SIZE = 30;
     public static final int WIDTH = 1700, HEIGHT = 900;
 
@@ -38,12 +36,11 @@ public class MainApplication extends Application {
         // Init scene
         Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        AdjacencyList maze = getMaze("maze2.txt");
+        Maze maze = getMaze("maze2.txt");
         assert(maze != null);
 
         GameWindow gameWindow = new GameWindow(maze);
-        ContainerPane containerPane = new ContainerPane(gameWindow);
-        GameLayerPane gameLayerPane = new GameLayerPane(containerPane);
+        GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
 
         root.getChildren().add(gameLayerPane);
         scene.setRoot(root);
@@ -54,7 +51,9 @@ public class MainApplication extends Application {
         stage.setResizable(false);
 
         // Events and controllers
-        this.playerController = new PlayerController(containerPane);
+        this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
+        this.playerController.teleport(maze.getStartLocation());
+
         registerEvents(scene);
 
         startMainLoop();
@@ -72,9 +71,9 @@ public class MainApplication extends Application {
         playerController.tick();
     }
 
-    private AdjacencyList getMaze(final String fileName) {
+    private Maze getMaze(final String fileName) {
         try {
-            return fileManager.readAdjacencyListFromFile(fileName);
+            return fileManager.readMazeFromFile(fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Error: File with name is not found.");
             return null;
