@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class PlayerController {
 
-    private final double PLAYER_SPEED = 2.3; // Cells per second
+    private final double PLAYER_SPEED = 3; // Cells per second
     private final GameWindow gameView;
     private final CollisionChecker collisionChecker;
 

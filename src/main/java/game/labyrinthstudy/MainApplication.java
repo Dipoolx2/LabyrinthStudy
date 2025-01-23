@@ -39,29 +39,33 @@ public class MainApplication extends Application {
         Maze maze = getMaze("maze2.txt");
         assert(maze != null);
 
-        GameWindow gameWindow = new GameWindow(maze);
-        GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
-
-        root.getChildren().add(gameLayerPane);
-        scene.setRoot(root);
+        this.setGameView(scene, root, maze);
 
         // Set window properties
         stage.setTitle("Labyrinth study");
         stage.setScene(scene);
         stage.setResizable(false);
 
-        // Events and controllers
+        registerGameKeys(scene, this.playerController);
+        startMainLoop();
+
+        stage.show();
+    }
+
+    public void setGameView(Scene scene, StackPane root, Maze maze) {
+        this.clearGameKeys(scene, this.playerController);
+
+        GameWindow gameWindow = new GameWindow(maze);
+        GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
+
+        root.getChildren().clear();
+        root.getChildren().add(gameLayerPane);
+
         this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
         this.playerController.teleport(maze.getStartLocation());
 
         this.locationListenerManager = new LocationListenerManager(this.playerController);
         this.locationListenerManager.addListener(maze.getEndLocation(), loc -> programFlowManager.finishMaze(maze));
-
-        registerEvents(scene);
-
-        startMainLoop();
-
-        stage.show();
     }
 
     private void startMainLoop() {
@@ -71,8 +75,10 @@ public class MainApplication extends Application {
     }
 
     public void tick() {
-        playerController.tick();
-        locationListenerManager.tick();
+        if (playerController != null)
+            playerController.tick();
+        if (locationListenerManager != null)
+            locationListenerManager.tick();
     }
 
     private Maze getMaze(final String fileName) {
@@ -84,9 +90,19 @@ public class MainApplication extends Application {
         }
     }
 
-    private void registerEvents(Scene scene) {
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, this.playerController.keyPressed());
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, this.playerController.keyReleased());
+    private void registerGameKeys(Scene scene, PlayerController playerController) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, playerController.keyPressed());
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, playerController.keyReleased());
+    }
+
+    private void clearGameKeys(Scene scene, PlayerController playerController) {
+        if (playerController != null && playerController.keyPressed() != null) {
+            scene.removeEventHandler(KeyEvent.KEY_PRESSED, playerController.keyPressed());
+        }
+
+        if (playerController != null && playerController.keyReleased() != null) {
+            scene.removeEventHandler(KeyEvent.KEY_RELEASED, playerController.keyReleased());
+        }
     }
 
     public static void main(String[] args) {
