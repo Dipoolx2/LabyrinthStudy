@@ -1,14 +1,14 @@
 package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
-import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.hud.GameSceneWrapper;
+import game.labyrinthstudy.hud.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -19,53 +19,47 @@ public class MainApplication extends Application {
     private PlayerController playerController;
     private AnimationTimer gameLoop;
     private LocationListenerManager locationListenerManager;
-    private ProgramFlowManager programFlowManager;
+    private StudyFlowManager studyFlowManager;
 
     public static final int CELL_SIZE = 70;
     public static final int MAZE_SIZE = 30;
     public static final int WIDTH = 1700, HEIGHT = 900;
 
+    private Stage stage;
+
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
+
         this.fileManager = new FileManager();
-        this.programFlowManager = new ProgramFlowManager();
-
-        // Register canvas to root
-        StackPane root = new StackPane();
-
-        // Init scene
-        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        this.studyFlowManager = new StudyFlowManager();
 
         Maze maze = getMaze("maze2.txt");
         assert(maze != null);
 
-        this.setGameView(scene, root, maze);
+        // Init scene
+        GameSceneWrapper gameGraphics = studyFlowManager.createGameScene(maze);
+        this.activateGameScene(gameGraphics.getGameScene(), gameGraphics.getGameWindow(), maze);
 
         // Set window properties
         stage.setTitle("Labyrinth study");
-        stage.setScene(scene);
         stage.setResizable(false);
 
-        registerGameKeys(scene, this.playerController);
         startMainLoop();
-
         stage.show();
     }
 
-    public void setGameView(Scene scene, StackPane root, Maze maze) {
+    public void activateGameScene(Scene scene, GameWindow gameWindow, Maze maze) {
         this.clearGameKeys(scene, this.playerController);
-
-        GameWindow gameWindow = new GameWindow(maze);
-        GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
-
-        root.getChildren().clear();
-        root.getChildren().add(gameLayerPane);
 
         this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
         this.playerController.teleport(maze.getStartLocation());
 
         this.locationListenerManager = new LocationListenerManager(this.playerController);
-        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> programFlowManager.finishMaze(maze));
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finished());
+        this.registerGameKeys(scene, this.playerController);
+
+        this.stage.setScene(scene);
     }
 
     private void startMainLoop() {
