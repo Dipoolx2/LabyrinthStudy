@@ -34,28 +34,25 @@ public class GameWindow extends StackPane { // Singleton stack pane
 
         GraphicsContext mazeGc = mazeWindow.getGraphicsContext2D();
         drawMaze(mazeGc);
-        drawStartLocation(mazeGc);
-        drawEndLocation(mazeGc);
+        drawMapMark(mazeGc, this.startLocation.getX(), this.startLocation.getY(), Color.GOLD);
+        drawMapMark(mazeGc, this.endLocation.getX(), this.endLocation.getY(), Color.GREEN);
 
         this.getChildren().add(mazeWindow);
     }
 
-    private void drawStartLocation(GraphicsContext gc) {
-        int x = this.startLocation.getX() * CELL_SIZE+CELL_SIZE/10;
-        int y = this.startLocation.getY() * CELL_SIZE+CELL_SIZE/10;
+    private void drawMapMark(GraphicsContext gc, int coordinateX, int coordinateY, Color centerColor) {
+        int x = coordinateX * CELL_SIZE+CELL_SIZE/2;
+        int y = coordinateY * CELL_SIZE+CELL_SIZE/2;
 
-        gc.setFill(Color.YELLOW.brighter());
+        double maxRadius = 60;
 
-        gc.fillRect(x, y, CELL_SIZE/1.25, CELL_SIZE/1.25);
-    }
-
-    private void drawEndLocation(GraphicsContext gc) {
-        int x = this.endLocation.getX() * CELL_SIZE+CELL_SIZE/10;
-        int y = this.endLocation.getY() * CELL_SIZE+CELL_SIZE/10;
-
-        gc.setFill(Color.GREEN.brighter());
-
-        gc.fillRect(x, y, CELL_SIZE/1.25, CELL_SIZE/1.25);
+        // Exponential diffusion gradient
+        for (int r = (int)maxRadius; r > 0; r--) {
+            // Exponential alpha falloff for more dramatic diffusion
+            double alpha = Math.pow(1 - (double)r / maxRadius, 3);
+            gc.setFill(centerColor.deriveColor(1, 1, 1, alpha * 0.8));
+            gc.fillOval(x - r, y - r, 2 * r, 2 * r);
+        }
     }
 
     public void updateMazeOffset(double playerX, double playerY) {
