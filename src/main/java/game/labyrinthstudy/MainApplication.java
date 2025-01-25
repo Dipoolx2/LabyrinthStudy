@@ -45,7 +45,7 @@ public class MainApplication extends Application {
         Maze maze1 = getMaze("maze1.txt");
         Maze maze2 = getMaze("maze2.txt");
 
-        Maze practiceMaze = getMaze("practice_maze.txt");
+        Maze practiceMaze = getMaze("practice.txt");
         assert(maze1 != null && maze2 != null && practiceMaze != null);
 
         List<Maze> mazes = Arrays.asList(maze2, maze1);

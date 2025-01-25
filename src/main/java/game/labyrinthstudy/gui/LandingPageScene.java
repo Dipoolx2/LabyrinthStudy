@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -167,8 +166,11 @@ public class LandingPageScene extends Scene {
         });
 
         stackPane.setOnMouseClicked(event -> {
-            studyFlowManager.playPracticeMaze(practiceMaze);
-            this.buttons.getChildren().add(playStudyButton());
+            studyFlowManager.playPracticeMaze();
+            if (!practiceMazePlayed) {
+                this.buttons.getChildren().add(playStudyButton());
+                practiceMazePlayed = true;
+            }
         });
 
         return stackPane;

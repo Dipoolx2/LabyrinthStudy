@@ -20,6 +20,8 @@ public class StudyFlowManager implements TickListener {
     private final Map<Maze, MazeResults> results;
     private final Map<Maze, PlayerController> playerControllers;
 
+    private Maze practiceMaze;
+
     private LandingPageScene landingPageScene;
     private Maze currentMaze;
 
@@ -37,6 +39,7 @@ public class StudyFlowManager implements TickListener {
     public void start(Collection<Maze> mazes, Maze practiceMaze) {
         this.landingPageScene = new LandingPageScene(this, mazes, practiceMaze);
         this.app.triviallySetScene(landingPageScene);
+        this.practiceMaze = practiceMaze;
     }
 
     public void startStudy(Collection<Maze> mazes) {
@@ -58,12 +61,11 @@ public class StudyFlowManager implements TickListener {
     }
 
     public void finishMaze(boolean gaveUp, boolean practiceMaze) {
-        StatsRecorder statsRecorder = this.recorders.get(currentMaze);
+        StatsRecorder statsRecorder = this.recorders.get(practiceMaze ? this.practiceMaze : this.currentMaze);
         statsRecorder.stopRecordings();
         if (practiceMaze) {
-            this.recorders.remove(currentMaze);
+            this.recorders.remove(this.practiceMaze);
             this.app.triviallySetScene(this.landingPageScene);
-            currentMaze = null;
             return;
         }
 
@@ -81,12 +83,13 @@ public class StudyFlowManager implements TickListener {
         finishStudy();
     }
 
-    public void playPracticeMaze(Maze practiceMaze) {
-        this.currentMaze = practiceMaze;
+    public void playPracticeMaze() {
         StatsRecorder statsRecorder = new StatsRecorder();
-        this.recorders.put(practiceMaze, statsRecorder);
+        this.recorders.put(this.practiceMaze, statsRecorder);
+
         GameScene gameScene = createGameScene(practiceMaze, statsRecorder, true);
         app.activateGameScene(gameScene, gameScene.getGameWindow(), practiceMaze, statsRecorder, true);
+
         statsRecorder.startRecordings();
     }
 
