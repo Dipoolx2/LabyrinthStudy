@@ -143,7 +143,7 @@ public class GameHudPane extends VBox {
         actualList.setTranslateX(50);
 
         Font listItemFont = Font.font("Courier New", 25);
-        Label currentMazeLabel = new Label("Current maze: " + "maze 1");
+        Label currentMazeLabel = new Label("Current maze: " + studyFlowManager.getCurrentMazeName());
         currentMazeLabel.setFont(listItemFont);
         currentMazeLabel.setTextFill(Color.ANTIQUEWHITE);
 

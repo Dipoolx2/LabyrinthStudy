@@ -3,6 +3,7 @@ package game.labyrinthstudy.study;
 import game.labyrinthstudy.MainApplication;
 import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.game.Maze;
+import game.labyrinthstudy.game.PlayerController;
 import game.labyrinthstudy.graphics.GameWindow;
 import game.labyrinthstudy.gui.GameHudPane;
 import game.labyrinthstudy.gui.GameScene;
@@ -15,6 +16,8 @@ public class StudyFlowManager implements TickListener {
 
     private final Queue<Maze> mazes;
     private final Map<Maze, StatsRecorder> recorders;
+    private final Map<Maze, MazeResults> results;
+    private final Map<Maze, PlayerController> playerControllers;
 
     private Maze currentMaze;
 
@@ -23,6 +26,9 @@ public class StudyFlowManager implements TickListener {
 
         this.mazes = new ArrayDeque<>();
         this.recorders = new HashMap<>();
+        this.results = new HashMap<>();
+        this.playerControllers = new HashMap<>();
+
         this.currentMaze = null;
     }
 
@@ -38,18 +44,24 @@ public class StudyFlowManager implements TickListener {
     }
 
     private void finishStudy() {
+        for (Map.Entry<Maze, MazeResults> result : this.results.entrySet()) {
+            Maze maze = result.getKey();
+            result.getValue().computeAllResults(maze, playerControllers.get(maze));
+        }
 
     }
 
     public void finishMaze(boolean gaveUp) {
         StatsRecorder statsRecorder = this.recorders.get(currentMaze);
         statsRecorder.stopRecordings();
-        statsRecorder.saveRecordings();
+        MazeResults results = statsRecorder.saveRecordings(gaveUp);
+        this.results.put(currentMaze, results);
 
         if (!mazes.isEmpty()) {
             Maze nextMaze = this.mazes.remove();
             StatsRecorder newRecorder = this.startMazeAndRecordings(nextMaze);
             this.recorders.put(nextMaze, newRecorder);
+
             return;
         }
 
@@ -58,10 +70,11 @@ public class StudyFlowManager implements TickListener {
 
     private StatsRecorder startMazeAndRecordings(Maze maze) {
         StatsRecorder statsRecorder = new StatsRecorder();
-        GameScene newGameScene = createGameScene(maze, statsRecorder);
-
-        app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder);
         this.currentMaze = maze;
+
+        GameScene newGameScene = createGameScene(maze, statsRecorder);
+        PlayerController playerController = app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder);
+        this.playerControllers.put(maze, playerController);
 
         statsRecorder.startRecordings();
         return statsRecorder;
@@ -70,6 +83,11 @@ public class StudyFlowManager implements TickListener {
     public GameScene createGameScene(Maze maze, StatsRecorder statsRecorder) {
         GameWindow gameWindow = new GameWindow(maze);
         return new GameScene( gameWindow, new GameHudPane(statsRecorder, this));
+    }
+
+    public String getCurrentMazeName() {
+        if (this.currentMaze == null) return "None";
+        return this.currentMaze.toString();
     }
 
     @Override

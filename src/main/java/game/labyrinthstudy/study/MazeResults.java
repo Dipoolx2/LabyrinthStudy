@@ -14,14 +14,14 @@ public class MazeResults {
     private int distanceToEnd;
     private int distanceFromStart;
 
-    public MazeResults(StatsRecorder statsRecorder, boolean gaveUp, Maze maze, PlayerController playerController) {
+    public MazeResults(StatsRecorder statsRecorder, boolean gaveUp) {
         this.distanceWalked = statsRecorder.getDistanceWalked();
         this.keystrokesPressed = statsRecorder.getKeystrokesCount();
         this.timePassed = statsRecorder.getTimePassedMs();
         this.gaveUp = gaveUp;
     }
 
-    public void computeAllResults() {
+    public void computeAllResults(Maze maze, PlayerController playerController) {
         // Compute distance from end, distance from start
 
         this.finalResultsAvailable = true;

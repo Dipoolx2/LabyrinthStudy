@@ -47,8 +47,8 @@ public class StatsRecorder {
         this.active = false;
     }
 
-    public void saveRecordings() {
-
+    public MazeResults saveRecordings(boolean gaveUp) {
+        return new MazeResults(this, gaveUp);
     }
 
     public double getDistanceWalked() {
