@@ -3,17 +3,11 @@ package game.labyrinthstudy.study;
 import game.labyrinthstudy.MainApplication;
 import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.game.Maze;
-import game.labyrinthstudy.game.PlayerController;
-import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
-import game.labyrinthstudy.gui.GameSceneWrapper;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import game.labyrinthstudy.gui.GameHudPane;
+import game.labyrinthstudy.gui.GameScene;
 
 import java.util.*;
-
-import static game.labyrinthstudy.MainApplication.HEIGHT;
-import static game.labyrinthstudy.MainApplication.WIDTH;
 
 public class StudyFlowManager implements TickListener {
 
@@ -63,26 +57,19 @@ public class StudyFlowManager implements TickListener {
     }
 
     private StatsRecorder startMazeAndRecordings(Maze maze) {
-        GameSceneWrapper newGameScene = createGameScene(maze);
-
         StatsRecorder statsRecorder = new StatsRecorder();
+        GameScene newGameScene = createGameScene(maze, statsRecorder);
 
-        app.activateGameScene(newGameScene.getGameScene(), newGameScene.getGameWindow(), maze, statsRecorder);
+        app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder);
         this.currentMaze = maze;
 
         statsRecorder.startRecordings();
         return statsRecorder;
     }
 
-    public GameSceneWrapper createGameScene(Maze maze) {
-        StackPane root = new StackPane();
-        Scene gameScene = new Scene(root, WIDTH, HEIGHT);
-
+    public GameScene createGameScene(Maze maze, StatsRecorder statsRecorder) {
         GameWindow gameWindow = new GameWindow(maze);
-        GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
-        root.getChildren().add(gameLayerPane);
-
-        return new GameSceneWrapper(gameScene, gameWindow);
+        return new GameScene( gameWindow, new GameHudPane(statsRecorder));
     }
 
     @Override

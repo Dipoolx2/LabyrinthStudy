@@ -1,8 +1,6 @@
 package game.labyrinthstudy.graphics;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
+import javafx.geometry.Pos;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
@@ -55,6 +53,11 @@ public class GameLayerPane extends StackPane {
         Color foregroundColor = BG_COLOR.darker().darker();
 
         // Background rectangle covering entire screen
+        Rectangle backgroundLeftFill = new Rectangle(1000, HEIGHT);
+        backgroundLeftFill.setFill(foregroundColor);
+        overlayPane.getChildren().add(backgroundLeftFill);
+        StackPane.setAlignment(backgroundLeftFill, Pos.CENTER_LEFT);
+
         Rectangle background = new Rectangle(WIDTH, HEIGHT);
         Rectangle backgroundsBackground = new Rectangle(WIDTH, HEIGHT); // To sharpen edges on the screen borders
 
@@ -78,7 +81,7 @@ public class GameLayerPane extends StackPane {
         Shape combinedShape = Shape.subtract(background, hole);
         combinedShape.setFill(gradient);
 
-        Shape combinedShapeSharp = Shape.subtract(background, sharpHole);
+        Shape combinedShapeSharp = Shape.subtract(backgroundsBackground, sharpHole);
         combinedShapeSharp.setFill(foregroundColor);
 
         // Add gaussian blur for extra soft edge
