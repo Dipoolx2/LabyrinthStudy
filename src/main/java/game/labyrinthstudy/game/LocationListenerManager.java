@@ -1,11 +1,13 @@
 package game.labyrinthstudy.game;
 
+import game.labyrinthstudy.TickListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LocationListenerManager {
+public class LocationListenerManager implements TickListener {
 
     private final PlayerController playerController;
     private final Map<Location, List<ListenerAction>> listeners;
@@ -21,6 +23,7 @@ public class LocationListenerManager {
         this.listeners.get(location).add(action);
     }
 
+    @Override
     public void tick() {
         for (Location loc : this.listeners.keySet()) {
             if (this.playerController.atLocation(loc)) {

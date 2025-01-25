@@ -2,7 +2,7 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameWindow;
-import game.labyrinthstudy.gui.StudyFlowManager;
+import game.labyrinthstudy.study.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -12,7 +12,9 @@ import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainApplication extends Application {
 
@@ -21,6 +23,8 @@ public class MainApplication extends Application {
     private AnimationTimer gameLoop;
     private LocationListenerManager locationListenerManager;
     private StudyFlowManager studyFlowManager;
+
+    private Set<TickListener> tickListeners;
 
     public static final int CELL_SIZE = 100;
     public static final int MAZE_SIZE = 30;
@@ -31,6 +35,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
+        this.tickListeners = new HashSet<>();
 
         this.fileManager = new FileManager();
         this.studyFlowManager = new StudyFlowManager(this);
@@ -50,17 +55,29 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public void activateGameScene(Scene scene, GameWindow gameWindow, Maze maze) {
+    public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze) {
         this.clearGameKeys(scene, this.playerController);
-
+        this.deregisterTickListener(this.playerController);
         this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
         this.playerController.teleport(maze.getStartLocation());
-
-        this.locationListenerManager = new LocationListenerManager(this.playerController);
-        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze());
         this.registerGameKeys(scene, this.playerController);
 
+        this.deregisterTickListener(this.locationListenerManager);
+        this.locationListenerManager = new LocationListenerManager(this.playerController);
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze());
+
+        this.registerTickListener(this.playerController);
+        this.registerTickListener(this.locationListenerManager);
+
         this.stage.setScene(scene);
+
+        return this.playerController;
+    }
+
+    private void deregisterTickListener(TickListener tickListener) {
+        if (tickListener != null) {
+            this.tickListeners.remove(tickListener);
+        }
     }
 
     private void startMainLoop() {
@@ -70,10 +87,7 @@ public class MainApplication extends Application {
     }
 
     public void tick() {
-        if (playerController != null)
-            playerController.tick();
-        if (locationListenerManager != null)
-            locationListenerManager.tick();
+        this.tickListeners.forEach(TickListener::tick);
     }
 
     private Maze getMaze(final String fileName) {
@@ -83,6 +97,10 @@ public class MainApplication extends Application {
             System.out.println("Error: File with name is not found.");
             return null;
         }
+    }
+
+    public void registerTickListener(TickListener tickListener) {
+        this.tickListeners.add(tickListener);
     }
 
     private void registerGameKeys(Scene scene, PlayerController playerController) {

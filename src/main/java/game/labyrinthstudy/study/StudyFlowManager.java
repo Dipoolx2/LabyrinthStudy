@@ -1,10 +1,12 @@
-package game.labyrinthstudy.gui;
+package game.labyrinthstudy.study;
 
 import game.labyrinthstudy.MainApplication;
+import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.game.Maze;
+import game.labyrinthstudy.game.PlayerController;
 import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
-import game.labyrinthstudy.program.Recorder;
+import game.labyrinthstudy.gui.GameSceneWrapper;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 
@@ -13,11 +15,12 @@ import java.util.*;
 import static game.labyrinthstudy.MainApplication.HEIGHT;
 import static game.labyrinthstudy.MainApplication.WIDTH;
 
-public class StudyFlowManager {
+public class StudyFlowManager implements TickListener {
 
     private final MainApplication app;
+
     private final Queue<Maze> mazes;
-    private final Map<Maze, Recorder> recorders;
+    private final Map<Maze, StatsRecorder> recorders;
 
     private Maze currentMaze;
 
@@ -30,56 +33,43 @@ public class StudyFlowManager {
     }
 
     public void start(Collection<Maze> mazes) {
-        System.out.println("Starting with mazes: " + mazes);
-
         this.mazes.addAll(mazes);
-        mazes.forEach(m -> this.recorders.put(m, new Recorder(m)));
-
-        System.out.println("After adding (queue): " + mazes);
-        System.out.println("After adding (map): " + this.recorders);
-
         if (this.mazes.isEmpty()) {
             this.finishStudy();
         }
 
         Maze firstMaze = this.mazes.remove();
-
-        System.out.println("After removing first maze (" + firstMaze + "): " + this.mazes);
-        Recorder recorder = this.recorders.get(firstMaze);
-
-        this.startMazeAndRecordings(firstMaze, recorder);
+        StatsRecorder firstRecorder = this.startMazeAndRecordings(firstMaze);
+        this.recorders.put(firstMaze, firstRecorder);
     }
 
     private void finishStudy() {
-        System.out.println("No more mazes left, finish study");
+
     }
 
     public void finishMaze() {
-        System.out.println("Finished maze");
-
-        Recorder recorder = this.recorders.get(currentMaze);
-        recorder.stopRecordings();
-        recorder.saveRecordings();
+        StatsRecorder statsRecorder = this.recorders.get(currentMaze);
+        statsRecorder.stopRecordings();
+        statsRecorder.saveRecordings();
 
         if (!mazes.isEmpty()) {
-            System.out.println("Mazes is not empty");
             Maze nextMaze = this.mazes.remove();
-            System.out.println("Next maze is ");
-            Recorder nextMazeRecorder = this.recorders.get(nextMaze);
-            this.startMazeAndRecordings(nextMaze, nextMazeRecorder);
+            StatsRecorder newRecorder = this.startMazeAndRecordings(nextMaze);
+            this.recorders.put(nextMaze, newRecorder);
         }
 
         finishStudy();
     }
 
-    private void startMazeAndRecordings(Maze maze, Recorder recorder) {
+    private StatsRecorder startMazeAndRecordings(Maze maze) {
         GameSceneWrapper newGameScene = createGameScene(maze);
 
-        app.activateGameScene(newGameScene.getGameScene(), newGameScene.getGameWindow(), maze);
+        PlayerController playerController = app.activateGameScene(newGameScene.getGameScene(), newGameScene.getGameWindow(), maze);
         this.currentMaze = maze;
 
-        recorder.startRecordings();
-        System.out.println("Currently playing maze: " + maze);
+        StatsRecorder statsRecorder = new StatsRecorder(playerController);
+        statsRecorder.startRecordings();
+        return statsRecorder;
     }
 
     public GameSceneWrapper createGameScene(Maze maze) {
@@ -93,4 +83,8 @@ public class StudyFlowManager {
         return new GameSceneWrapper(gameScene, gameWindow);
     }
 
+    @Override
+    public void tick() {
+
+    }
 }

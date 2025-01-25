@@ -1,6 +1,7 @@
 package game.labyrinthstudy.game;
 
 import game.labyrinthstudy.MainApplication;
+import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
 import javafx.event.EventHandler;
@@ -11,7 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class PlayerController {
+public class PlayerController implements TickListener {
 
     private final double PLAYER_SPEED = 3; // Cells per second
     private final GameWindow gameView;
@@ -57,6 +58,7 @@ public class PlayerController {
         return velY * speedCorrectionMultiplier();
     }
 
+    @Override
     public void tick() {
         updatePositions();
         gameView.updateMazeOffset(playerX, playerY);
