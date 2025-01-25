@@ -62,6 +62,7 @@ public class GameWindow extends StackPane { // Singleton stack pane
 
     private void drawMaze(GraphicsContext gc) {
         gc.setLineWidth(WALL_WIDTH);
+        gc.setStroke(Color.BLACK);
         for (Map.Entry<Location, List<Location>> entry : adjacencyList.getMap().entrySet()) {
             Location current = entry.getKey();
             List<Location> neighbors = entry.getValue();

@@ -28,7 +28,7 @@ public class GameLayerPane extends StackPane {
     public static final double PL_RADIUS = 13;
     private final double CIRCLE_OVERLAY_RADIUS = 360;
 
-    private final Color BG_COLOR = Color.DARKGRAY;
+    public static final Color BG_COLOR = Color.web("#bdc9de");
 
     public GameLayerPane(GameWindow gameWindow) {
         this.PL_VIEW = generatePlayerView();
