@@ -38,7 +38,7 @@ public class FileManager {
 
         AdjacencyList adjacencyList = AdjacencyList.fromString(stringBuilder.toString());
 
-        return new Maze(adjacencyList, startLocation, endLocation);
+        return new Maze(fileName.substring(0, fileName.lastIndexOf('.')), adjacencyList, startLocation, endLocation);
     }
 
 

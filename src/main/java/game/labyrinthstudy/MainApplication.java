@@ -12,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainApplication extends Application {
 
@@ -32,14 +34,14 @@ public class MainApplication extends Application {
         this.stage = stage;
 
         this.fileManager = new FileManager();
-        this.studyFlowManager = new StudyFlowManager();
+        this.studyFlowManager = new StudyFlowManager(this);
 
-        Maze maze = getMaze("maze2.txt");
-        assert(maze != null);
+        Maze maze1 = getMaze("maze1.txt");
+        Maze maze2 = getMaze("maze2.txt");
+        assert(maze1 != null && maze2 != null);
 
-        // Init scene
-        GameSceneWrapper gameGraphics = studyFlowManager.createGameScene(maze);
-        this.activateGameScene(gameGraphics.getGameScene(), gameGraphics.getGameWindow(), maze);
+        List<Maze> mazes = Arrays.asList(maze2, maze1);
+        studyFlowManager.start(mazes);
 
         // Set window properties
         stage.setTitle("Labyrinth study");
@@ -56,7 +58,7 @@ public class MainApplication extends Application {
         this.playerController.teleport(maze.getStartLocation());
 
         this.locationListenerManager = new LocationListenerManager(this.playerController);
-        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finished());
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze());
         this.registerGameKeys(scene, this.playerController);
 
         this.stage.setScene(scene);

@@ -70,7 +70,6 @@ public class PlayerController {
 
         this.playerX += finalDeltas.getKey();
         this.playerY += finalDeltas.getValue();
-        System.out.println(this.playerX + " " + this.playerY);
     }
 
     private double speedCorrectionMultiplier() {
