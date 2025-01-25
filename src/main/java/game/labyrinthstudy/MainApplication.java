@@ -23,7 +23,7 @@ public class MainApplication extends Application {
     private LocationListenerManager locationListenerManager;
     private StudyFlowManager studyFlowManager;
 
-    public static final int CELL_SIZE = 70;
+    public static final int CELL_SIZE = 100;
     public static final int MAZE_SIZE = 30;
     public static final int WIDTH = 1700, HEIGHT = 900;
 
