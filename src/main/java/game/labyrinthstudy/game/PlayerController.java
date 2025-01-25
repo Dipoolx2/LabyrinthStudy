@@ -4,6 +4,7 @@ import game.labyrinthstudy.MainApplication;
 import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.graphics.GameLayerPane;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.study.StatsRecorder;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -17,11 +18,13 @@ public class PlayerController implements TickListener {
     private final double PLAYER_SPEED = 3; // Cells per second
     private final GameWindow gameView;
     private final CollisionChecker collisionChecker;
+    private final StatsRecorder statsRecorder;
 
     private double playerX, playerY, velX, velY;
 
-    public PlayerController(GameWindow view, AdjacencyList adjacencyList) {
+    public PlayerController(GameWindow view, AdjacencyList adjacencyList, StatsRecorder statsRecorder) {
         this.gameView = view;
+        this.statsRecorder = statsRecorder;
 
         this.collisionChecker = new CollisionChecker(adjacencyList, this);
         this.keysPressed = new HashSet<>();
@@ -69,9 +72,14 @@ public class PlayerController implements TickListener {
                 = this.collisionChecker.getLegalCoordinates(this.getEffectiveVelX(), this.getEffectiveVelY(),
                                                  GameLayerPane.PL_RADIUS/MainApplication.CELL_SIZE);
 
+        double dx = finalDeltas.getKey();
+        double dy = finalDeltas.getValue();
 
-        this.playerX += finalDeltas.getKey();
-        this.playerY += finalDeltas.getValue();
+        this.playerX += dx;
+        this.playerY += dy;
+
+        double deltaDistance = Math.sqrt(dx*dx + dy*dy);
+        this.statsRecorder.incrementDistanceWalked(deltaDistance);
     }
 
     private double speedCorrectionMultiplier() {
@@ -95,6 +103,7 @@ public class PlayerController implements TickListener {
             if (directionMap.containsKey(e.getCode())) {
                 if (keysPressed.add(e.getCode())) {  // Add key if not already pressed
                     updateVelocities();
+                    statsRecorder.incrementKeystrokes();
                 }
             }
         };

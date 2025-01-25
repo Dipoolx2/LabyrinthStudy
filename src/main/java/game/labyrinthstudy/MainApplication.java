@@ -2,6 +2,7 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.study.StatsRecorder;
 import game.labyrinthstudy.study.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
@@ -55,19 +56,17 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze) {
+    public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze, StatsRecorder statsRecorder) {
         this.clearGameKeys(scene, this.playerController);
         this.deregisterTickListener(this.playerController);
-        this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList());
+        this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList(), statsRecorder);
         this.playerController.teleport(maze.getStartLocation());
         this.registerGameKeys(scene, this.playerController);
 
-        this.deregisterTickListener(this.locationListenerManager);
         this.locationListenerManager = new LocationListenerManager(this.playerController);
         this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze());
 
         this.registerTickListener(this.playerController);
-        this.registerTickListener(this.locationListenerManager);
 
         this.stage.setScene(scene);
 
@@ -88,6 +87,12 @@ public class MainApplication extends Application {
 
     public void tick() {
         this.tickListeners.forEach(TickListener::tick);
+
+        // Location listener manager removes itself from the list of tick listeners in some occasions.
+        // It is not supposed to be in tick listeners for this reason, as it can cause concurrent modification exceptions.
+        if (this.locationListenerManager != null) {
+            this.locationListenerManager.tick();
+        }
     }
 
     private Maze getMaze(final String fileName) {

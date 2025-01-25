@@ -1,34 +1,78 @@
 package game.labyrinthstudy.study;
 
-import game.labyrinthstudy.game.Maze;
-import game.labyrinthstudy.game.PlayerController;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class StatsRecorder {
 
-    private SimpleLongProperty timePassedMs;
-    private SimpleIntegerProperty unitsWalked;
-    private SimpleIntegerProperty keystrokesCount;
+    private long lastTick;
+    private final SimpleLongProperty timePassedMs;
+    private final SimpleDoubleProperty distanceWalked;
+    private final SimpleIntegerProperty keystrokesCount;
 
-    public StatsRecorder(PlayerController playerController) {
+    private boolean active;
+
+    public StatsRecorder() {
+        this.active = false;
+        this.lastTick = 0;
+
         this.timePassedMs = new SimpleLongProperty(0);
-        this.unitsWalked = new SimpleIntegerProperty(0);
+        this.distanceWalked = new SimpleDoubleProperty(0);
         this.keystrokesCount = new SimpleIntegerProperty(0);
     }
 
-    public void startRecordings() {
+    public void updateTime() {
+        if (!active) return;
+        this.timePassedMs.add(System.currentTimeMillis() - lastTick);
+        this.lastTick = System.currentTimeMillis();
+    }
 
+    public void incrementDistanceWalked(double value) {
+        if (!active) return;
+        this.distanceWalked.add(value);
+    }
+
+    public void incrementKeystrokes() {
+        if (!active) return;
+        this.keystrokesCount.add(1);
+    }
+
+    public void startRecordings() {
+        this.active = true;
+        this.lastTick = System.currentTimeMillis();
     }
 
     public void stopRecordings() {
-
+        this.active = false;
     }
 
     public void saveRecordings() {
 
     }
 
+    public double getDistanceWalked() {
+        return distanceWalked.get();
+    }
 
+    public int getKeystrokesCount() {
+        return keystrokesCount.get();
+    }
+
+    public long getTimePassedMs() {
+        return timePassedMs.get();
+    }
+
+    public SimpleIntegerProperty getKeystrokesCountProperty() {
+        return this.keystrokesCount;
+    }
+
+    public SimpleLongProperty getTimePassedProperty() {
+        return this.timePassedMs;
+    }
+
+    public SimpleDoubleProperty getDistanceWalkedProperty() {
+        return this.distanceWalked;
+    }
 }
 

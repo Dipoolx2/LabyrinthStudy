@@ -56,6 +56,7 @@ public class StudyFlowManager implements TickListener {
             Maze nextMaze = this.mazes.remove();
             StatsRecorder newRecorder = this.startMazeAndRecordings(nextMaze);
             this.recorders.put(nextMaze, newRecorder);
+            return;
         }
 
         finishStudy();
@@ -64,10 +65,11 @@ public class StudyFlowManager implements TickListener {
     private StatsRecorder startMazeAndRecordings(Maze maze) {
         GameSceneWrapper newGameScene = createGameScene(maze);
 
-        PlayerController playerController = app.activateGameScene(newGameScene.getGameScene(), newGameScene.getGameWindow(), maze);
+        StatsRecorder statsRecorder = new StatsRecorder();
+
+        app.activateGameScene(newGameScene.getGameScene(), newGameScene.getGameWindow(), maze, statsRecorder);
         this.currentMaze = maze;
 
-        StatsRecorder statsRecorder = new StatsRecorder(playerController);
         statsRecorder.startRecordings();
         return statsRecorder;
     }
@@ -85,6 +87,8 @@ public class StudyFlowManager implements TickListener {
 
     @Override
     public void tick() {
-
+        if (this.currentMaze == null) return;
+        StatsRecorder recorder = this.recorders.get(this.currentMaze);
+        recorder.updateTime();
     }
 }
