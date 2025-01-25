@@ -19,9 +19,11 @@ public class GameHudPane extends VBox {
 
     private final StatsRecorder statsRecorder;
     private final StudyFlowManager studyFlowManager;
+    private final boolean inPractice;
 
-    public GameHudPane(StatsRecorder statsRecorder, StudyFlowManager studyFlowManager) {
+    public GameHudPane(StatsRecorder statsRecorder, StudyFlowManager studyFlowManager, boolean inPractice) {
         super(70);
+        this.inPractice = inPractice;
 
         this.statsRecorder = statsRecorder;
         this.studyFlowManager = studyFlowManager;
@@ -107,7 +109,7 @@ public class GameHudPane extends VBox {
         });
 
         stackPane.setOnMouseClicked(event -> {
-            studyFlowManager.finishMaze(true);
+            studyFlowManager.finishMaze(true, this.inPractice);
         });
 
         return stackPane;

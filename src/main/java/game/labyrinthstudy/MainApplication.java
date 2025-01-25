@@ -44,10 +44,12 @@ public class MainApplication extends Application {
 
         Maze maze1 = getMaze("maze1.txt");
         Maze maze2 = getMaze("maze2.txt");
-        assert(maze1 != null && maze2 != null);
+
+        Maze practiceMaze = getMaze("practice_maze.txt");
+        assert(maze1 != null && maze2 != null && practiceMaze != null);
 
         List<Maze> mazes = Arrays.asList(maze2, maze1);
-        studyFlowManager.start(mazes);
+        studyFlowManager.start(mazes, practiceMaze);
 
         // Set window properties
         stage.setTitle("Labyrinth study");
@@ -57,7 +59,7 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze, StatsRecorder statsRecorder) {
+    public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze, StatsRecorder statsRecorder, boolean practiceMaze) {
         this.clearGameKeys(scene, this.playerController);
         this.deregisterTickListener(this.playerController);
         this.playerController = new PlayerController(gameWindow, maze.getAdjacencyList().getWallAdjacencyList(), statsRecorder);
@@ -65,7 +67,7 @@ public class MainApplication extends Application {
         this.registerGameKeys(scene, this.playerController);
 
         this.locationListenerManager = new LocationListenerManager(this.playerController);
-        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze(false));
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze(false, practiceMaze));
 
         this.registerTickListener(this.playerController);
 
@@ -78,6 +80,10 @@ public class MainApplication extends Application {
         if (tickListener != null) {
             this.tickListeners.remove(tickListener);
         }
+    }
+
+    public void triviallySetScene(Scene scene) {
+        this.stage.setScene(scene);
     }
 
     private void startMainLoop() {
