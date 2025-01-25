@@ -1,4 +1,4 @@
-package game.labyrinthstudy.hud;
+package game.labyrinthstudy.gui;
 
 import game.labyrinthstudy.MainApplication;
 import game.labyrinthstudy.game.Maze;

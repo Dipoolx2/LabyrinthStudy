@@ -5,6 +5,6 @@ module game.labyrinthstudy {
 
     opens game.labyrinthstudy to javafx.fxml;
     exports game.labyrinthstudy;
-    exports game.labyrinthstudy.hud;
-    opens game.labyrinthstudy.hud to javafx.fxml;
+    exports game.labyrinthstudy.gui;
+    opens game.labyrinthstudy.gui to javafx.fxml;
 }

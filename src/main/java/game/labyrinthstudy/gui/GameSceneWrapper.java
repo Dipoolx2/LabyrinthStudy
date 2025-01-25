@@ -1,4 +1,4 @@
-package game.labyrinthstudy.hud;
+package game.labyrinthstudy.gui;
 
 import game.labyrinthstudy.graphics.GameWindow;
 import javafx.scene.Scene;

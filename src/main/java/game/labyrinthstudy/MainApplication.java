@@ -2,8 +2,7 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameWindow;
-import game.labyrinthstudy.hud.GameSceneWrapper;
-import game.labyrinthstudy.hud.StudyFlowManager;
+import game.labyrinthstudy.gui.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
