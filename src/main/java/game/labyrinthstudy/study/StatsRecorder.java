@@ -24,18 +24,18 @@ public class StatsRecorder {
 
     public void updateTime() {
         if (!active) return;
-        this.timePassedMs.add(System.currentTimeMillis() - lastTick);
+        this.timePassedMs.set(this.timePassedMs.get() + (System.currentTimeMillis() - lastTick));
         this.lastTick = System.currentTimeMillis();
     }
 
     public void incrementDistanceWalked(double value) {
         if (!active) return;
-        this.distanceWalked.add(value);
+        this.distanceWalked.set(this.distanceWalked.get() + value);
     }
 
     public void incrementKeystrokes() {
         if (!active) return;
-        this.keystrokesCount.add(1);
+        this.keystrokesCount.set(this.keystrokesCount.get() + 1);
     }
 
     public void startRecordings() {

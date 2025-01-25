@@ -40,6 +40,7 @@ public class MainApplication extends Application {
 
         this.fileManager = new FileManager();
         this.studyFlowManager = new StudyFlowManager(this);
+        this.registerTickListener(studyFlowManager);
 
         Maze maze1 = getMaze("maze1.txt");
         Maze maze2 = getMaze("maze2.txt");
@@ -64,7 +65,7 @@ public class MainApplication extends Application {
         this.registerGameKeys(scene, this.playerController);
 
         this.locationListenerManager = new LocationListenerManager(this.playerController);
-        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze());
+        this.locationListenerManager.addListener(maze.getEndLocation(), loc -> studyFlowManager.finishMaze(false));
 
         this.registerTickListener(this.playerController);
 

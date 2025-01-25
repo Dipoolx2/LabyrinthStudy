@@ -24,7 +24,7 @@ public class GameScene extends Scene {
 
         root.getChildren().add(gameHudPane);
         StackPane.setAlignment(gameHudPane, Pos.CENTER_LEFT);
-        gameHudPane.setTranslateX(100);
+        gameHudPane.setTranslateX(150);
     }
 
     public GameWindow getGameWindow() {

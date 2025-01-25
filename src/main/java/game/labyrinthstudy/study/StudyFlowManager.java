@@ -41,7 +41,7 @@ public class StudyFlowManager implements TickListener {
 
     }
 
-    public void finishMaze() {
+    public void finishMaze(boolean gaveUp) {
         StatsRecorder statsRecorder = this.recorders.get(currentMaze);
         statsRecorder.stopRecordings();
         statsRecorder.saveRecordings();
@@ -69,7 +69,7 @@ public class StudyFlowManager implements TickListener {
 
     public GameScene createGameScene(Maze maze, StatsRecorder statsRecorder) {
         GameWindow gameWindow = new GameWindow(maze);
-        return new GameScene( gameWindow, new GameHudPane(statsRecorder));
+        return new GameScene( gameWindow, new GameHudPane(statsRecorder, this));
     }
 
     @Override
