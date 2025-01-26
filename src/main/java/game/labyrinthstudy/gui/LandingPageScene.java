@@ -37,7 +37,7 @@ public class LandingPageScene extends Scene {
             are marked yellow and green respectively. The "Maze Impossible" button is located near the bottom-left of the interface.
             
             Before beginning, please complete the practice maze to familiarize yourself with the user interface and controls.
-            We wish you the best of luck!
+            We wish you the best of luck! Note: The study starts right after you press the "Start Study >" button.
             \s""";
 
     private boolean practiceMazePlayed = false;

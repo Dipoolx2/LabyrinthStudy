@@ -42,8 +42,8 @@ public class MainApplication extends Application {
         this.studyFlowManager = new StudyFlowManager(this);
         this.registerTickListener(studyFlowManager);
 
-        Maze maze1 = getMaze("maze1.txt");
-        Maze maze2 = getMaze("maze2.txt");
+        Maze maze1 = getMaze("Maze 1.txt");
+        Maze maze2 = getMaze("Maze 2.txt");
 
         Maze practiceMaze = getMaze("practice.txt");
         assert(maze1 != null && maze2 != null && practiceMaze != null);

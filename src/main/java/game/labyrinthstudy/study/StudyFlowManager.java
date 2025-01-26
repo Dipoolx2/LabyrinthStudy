@@ -5,9 +5,11 @@ import game.labyrinthstudy.TickListener;
 import game.labyrinthstudy.game.Maze;
 import game.labyrinthstudy.game.PlayerController;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.gui.EndPageScene;
 import game.labyrinthstudy.gui.GameHudPane;
 import game.labyrinthstudy.gui.GameScene;
 import game.labyrinthstudy.gui.LandingPageScene;
+import javafx.scene.Scene;
 
 import java.util.*;
 
@@ -36,9 +38,14 @@ public class StudyFlowManager implements TickListener {
         this.currentMaze = null;
     }
 
+    public void restartStudy() {
+
+    }
+
     public void start(Collection<Maze> mazes, Maze practiceMaze) {
         this.landingPageScene = new LandingPageScene(this, mazes, practiceMaze);
         this.app.triviallySetScene(landingPageScene);
+//        this.app.triviallySetScene(generateEndScene());
         this.practiceMaze = practiceMaze;
     }
 
@@ -58,6 +65,13 @@ public class StudyFlowManager implements TickListener {
             Maze maze = result.getKey();
             result.getValue().computeAllResults(maze, playerControllers.get(maze));
         }
+
+        Scene endScene = generateEndScene();
+        this.app.triviallySetScene(endScene);
+    }
+
+    private Scene generateEndScene() {
+        return new EndPageScene(this.results, this);
     }
 
     public void finishMaze(boolean gaveUp, boolean practiceMaze) {
