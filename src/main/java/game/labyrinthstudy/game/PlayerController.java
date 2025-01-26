@@ -36,6 +36,10 @@ public class PlayerController implements TickListener {
         this.playerY = 0;
     }
 
+    public Location getLocation() {
+        return new Location((int) this.playerX, (int) this.playerY);
+    }
+
     public double getPlayerX() {
         return playerX;
     }

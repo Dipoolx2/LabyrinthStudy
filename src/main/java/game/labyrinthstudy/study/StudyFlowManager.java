@@ -30,7 +30,7 @@ public class StudyFlowManager implements TickListener {
     public StudyFlowManager(MainApplication app) {
         this.app = app;
 
-        this.mazes = new ArrayDeque<>();
+        this.mazes = new LinkedList<>();
         this.recorders = new HashMap<>();
         this.results = new HashMap<>();
         this.playerControllers = new HashMap<>();

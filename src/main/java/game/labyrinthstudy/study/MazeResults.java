@@ -1,5 +1,6 @@
 package game.labyrinthstudy.study;
 
+import game.labyrinthstudy.game.Location;
 import game.labyrinthstudy.game.Maze;
 import game.labyrinthstudy.game.PlayerController;
 
@@ -23,7 +24,9 @@ public class MazeResults {
 
     public void computeAllResults(Maze maze, PlayerController playerController) {
         // Compute distance from end, distance from start
-
+        Location playerLocation = playerController.getLocation();
+        this.distanceFromStart = DistanceCalculator.calculateDistance(maze, playerLocation, maze.getStartLocation());
+        this.distanceToEnd = DistanceCalculator.calculateDistance(maze, playerLocation, maze.getEndLocation());
         this.finalResultsAvailable = true;
     }
 
