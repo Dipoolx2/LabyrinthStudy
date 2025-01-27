@@ -12,19 +12,31 @@ import static game.labyrinthstudy.MainApplication.WIDTH;
 public class GameScene extends Scene {
 
     private final GameWindow gameWindow;
+    private final boolean practice;
 
-    public GameScene(GameWindow gameWindow, GameHudPane gameHudPane) {
+    public GameScene(GameWindow gameWindow, GameHudPane gameHudPane, boolean practice) {
         super(new StackPane(), WIDTH, HEIGHT);
+        this.practice = practice;
         this.gameWindow = gameWindow;
+
         StackPane root = (StackPane) getRoot();
 
         GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
-        root.getChildren().add(gameLayerPane);
-        gameLayerPane.setTranslateX(250);
 
-        root.getChildren().add(gameHudPane);
+        FeedbackHudPane feedbackHudPane = new FeedbackHudPane("You're making good progress!");
+        feedbackHudPane.setTranslateY(250);
+
+        StackPane gameWithFeedback = new StackPane(gameLayerPane);
+        if (!practice) {
+            gameWithFeedback.getChildren().add(feedbackHudPane);
+        }
+        gameWithFeedback.setAlignment(Pos.CENTER);
+        gameWithFeedback.setTranslateX(250);
+
         StackPane.setAlignment(gameHudPane, Pos.CENTER_LEFT);
         gameHudPane.setTranslateX(150);
+
+        root.getChildren().addAll(gameWithFeedback, gameHudPane);
     }
 
     public GameWindow getGameWindow() {

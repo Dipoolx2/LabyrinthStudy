@@ -121,7 +121,7 @@ public class StudyFlowManager implements TickListener {
 
     public GameScene createGameScene(Maze maze, StatsRecorder statsRecorder, boolean practiceMaze) {
         GameWindow gameWindow = new GameWindow(maze);
-        return new GameScene( gameWindow, new GameHudPane(statsRecorder, this, practiceMaze));
+        return new GameScene(gameWindow, new GameHudPane(statsRecorder, this, practiceMaze), practiceMaze);
     }
 
     public String getCurrentMazeName() {
