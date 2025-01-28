@@ -70,8 +70,8 @@ public class GameHudPane extends VBox {
 
     private StackPane impossibleButton() {
         int buttonWidth = 250, buttonHeight = 75;
-        Color defaultBackgroundColor = Color.web("#2c3138").darker();
-        Color selectedBackgroundColor = Color.web("#2c3138");
+        Color defaultBackgroundColor = Color.INDIANRED.brighter();
+        Color selectedBackgroundColor = defaultBackgroundColor.darker();
 
         StackPane stackPane = new StackPane();
         stackPane.setMaxHeight(buttonHeight);
@@ -79,18 +79,18 @@ public class GameHudPane extends VBox {
 
         Rectangle background = new Rectangle(buttonWidth,buttonHeight);
         background.setFill(defaultBackgroundColor);
-        background.setStroke(Color.INDIANRED);
+        background.setStroke(Color.ANTIQUEWHITE);
         background.setStrokeWidth(2);
         background.setArcWidth(20);
         background.setArcHeight(20);
 
         Label buttonLabel = new Label("Maze Impossible");
-        buttonLabel.setFont(Font.font("Courier New", 20));
-        buttonLabel.setTextFill(Color.INDIANRED);
+        buttonLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        buttonLabel.setTextFill(Color.ANTIQUEWHITE);
 
         Label subscriptLabel = new Label("(give up)");
-        subscriptLabel.setFont(Font.font("Courier New", 18));
-        subscriptLabel.setTextFill(Color.INDIANRED);
+        subscriptLabel.setFont(Font.font("Helvetica", 18));
+        subscriptLabel.setTextFill(Color.ANTIQUEWHITE);
 
         VBox buttonLabelStack = new VBox();
         buttonLabelStack.getChildren().addAll(buttonLabel, subscriptLabel);

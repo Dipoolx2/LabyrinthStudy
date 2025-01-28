@@ -23,6 +23,8 @@ public class FeedbackController {
         this.feedbackQueue = new LinkedList<>(feedbackCollection);
     }
 
+    private Timeline currentTimeline;
+
     public void start() {
         this.started = true;
 
@@ -34,16 +36,17 @@ public class FeedbackController {
         };
 
         // Set up the Timeline
-        Timeline timeline = new Timeline(
+        this.currentTimeline = new Timeline(
             new KeyFrame(Duration.seconds(10), e -> {
-                giveFeedbackRunnable.run();
                 if (!this.started) {
                     this.stop();
+                    return;
                 }
+                giveFeedbackRunnable.run();
             }) // Call the function every 2 seconds
         );
-        timeline.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
-        timeline.play(); // Start the timeline
+        currentTimeline.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
+        currentTimeline.play(); // Start the timeline
     }
 
     private void refillFeedbackQueue() {
@@ -55,6 +58,10 @@ public class FeedbackController {
 
     public void stop() {
         this.started = false;
+        if (this.currentTimeline == null)
+            return;
+
+        this.currentTimeline.stop();
     }
 
 
