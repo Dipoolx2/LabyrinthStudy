@@ -21,6 +21,7 @@ public class StudyFlowManager implements TickListener {
     private final Map<Maze, StatsRecorder> recorders;
     private final Map<Maze, MazeResults> results;
     private final Map<Maze, PlayerController> playerControllers;
+    private final Map<Maze, FeedbackController> feedbackControllers;
 
     private Maze practiceMaze;
 
@@ -34,6 +35,7 @@ public class StudyFlowManager implements TickListener {
         this.recorders = new HashMap<>();
         this.results = new HashMap<>();
         this.playerControllers = new HashMap<>();
+        this.feedbackControllers = new HashMap<>();
 
         this.currentMaze = null;
     }
@@ -83,6 +85,9 @@ public class StudyFlowManager implements TickListener {
             return;
         }
 
+        FeedbackController feedbackController = this.feedbackControllers.get(this.currentMaze);
+        feedbackController.stop();
+
         MazeResults results = statsRecorder.saveRecordings(gaveUp);
         this.results.put(currentMaze, results);
 
@@ -108,14 +113,22 @@ public class StudyFlowManager implements TickListener {
     }
 
     private StatsRecorder startMazeAndRecordings(Maze maze) {
+        final boolean positive = true;
+
         StatsRecorder statsRecorder = new StatsRecorder();
         this.currentMaze = maze;
 
         GameScene newGameScene = createGameScene(maze, statsRecorder, false);
         PlayerController playerController = app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder, false);
+
+        Collection<String> feedbacks = this.app.fileManager.readFeedbackSentences(positive);
+        FeedbackController feedbackController = new FeedbackController(newGameScene.getFeedbackHudPane(), feedbacks);
+
+        this.feedbackControllers.put(maze, feedbackController);
         this.playerControllers.put(maze, playerController);
 
         statsRecorder.startRecordings();
+        feedbackController.start();
         return statsRecorder;
     }
 

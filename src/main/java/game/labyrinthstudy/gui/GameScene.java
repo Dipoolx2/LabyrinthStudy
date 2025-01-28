@@ -14,6 +14,8 @@ public class GameScene extends Scene {
     private final GameWindow gameWindow;
     private final boolean practice;
 
+    private final FeedbackHudPane feedbackHudPane;
+
     public GameScene(GameWindow gameWindow, GameHudPane gameHudPane, boolean practice) {
         super(new StackPane(), WIDTH, HEIGHT);
         this.practice = practice;
@@ -23,12 +25,12 @@ public class GameScene extends Scene {
 
         GameLayerPane gameLayerPane = new GameLayerPane(gameWindow);
 
-        FeedbackHudPane feedbackHudPane = new FeedbackHudPane("You're making good progress!");
-        feedbackHudPane.setTranslateY(250);
+        this.feedbackHudPane = new FeedbackHudPane("You're making good progress!");
+        this.feedbackHudPane.setTranslateY(250);
 
         StackPane gameWithFeedback = new StackPane(gameLayerPane);
         if (!practice) {
-            gameWithFeedback.getChildren().add(feedbackHudPane);
+            gameWithFeedback.getChildren().add(this.feedbackHudPane);
         }
         gameWithFeedback.setAlignment(Pos.CENTER);
         gameWithFeedback.setTranslateX(250);
@@ -37,6 +39,10 @@ public class GameScene extends Scene {
         gameHudPane.setTranslateX(150);
 
         root.getChildren().addAll(gameWithFeedback, gameHudPane);
+    }
+
+    public FeedbackHudPane getFeedbackHudPane() {
+        return this.feedbackHudPane;
     }
 
     public GameWindow getGameWindow() {

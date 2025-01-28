@@ -5,11 +5,14 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+
+import java.util.Stack;
 
 public class FeedbackHudPane extends StackPane {
 
@@ -24,28 +27,50 @@ public class FeedbackHudPane extends StackPane {
         messageLabel.setFont(fontToUse);
         messageLabel.setTextFill(Color.ANTIQUEWHITE);
 
-        Rectangle background = getBackground(messageLabel, backgroundColor, strokeColor);
+        StackPane background = getBackground(messageLabel, backgroundColor, strokeColor);
 
         getChildren().addAll(background, messageLabel);
         setAlignment(Pos.CENTER);
+
+        setOpacity(0);
     }
 
-    private static Rectangle getBackground(Label messageLabel, Color backgroundColor, Color strokeColor) {
+    private static StackPane getBackground(Label messageLabel, Color backgroundColor, Color strokeColor) {
+        final int arc = 20, baseSize = 20, extraWidth = 40, extraHeight = 20;
         final ReadOnlyObjectProperty<Bounds> textBounds = messageLabel.layoutBoundsProperty();
 
-        Rectangle background = new Rectangle(20, 20);
+        Rectangle background = new Rectangle(baseSize, baseSize);
         background.setFill(backgroundColor);
-        background.setArcHeight(20);
-        background.setArcWidth(20);
-        background.setStroke(strokeColor);
-        background.setStrokeWidth(2);
+        background.setArcHeight(arc);
+        background.setArcWidth(arc);
+
+        BoxBlur blur = new BoxBlur(10, 10, 3);
+        background.setEffect(blur); // Add blur effect to the background
+
+        Rectangle stroke = new Rectangle(baseSize, baseSize);
+        stroke.setFill(Color.TRANSPARENT);
+        stroke.setArcWidth(arc);
+        stroke.setArcHeight(arc);
+        stroke.setStrokeWidth(2);
+        stroke.setStroke(strokeColor);
+
+        StackPane stackPane = new StackPane(background, stroke);
+        stackPane.setMaxWidth(baseSize);
+        stackPane.setMaxHeight(baseSize);
 
         textBounds.addListener((obs, ov, nv) -> {
-            background.setWidth(nv.getWidth() + 40);
-            background.setHeight(nv.getHeight() + 20);
+            double newWidth = nv.getWidth() + extraWidth;
+            double newHeight = nv.getHeight() + extraHeight;
+
+            background.setWidth(newWidth);
+            background.setHeight(newHeight);
+            stroke.setWidth(newWidth);
+            stroke.setHeight(newHeight);
+            stackPane.setMaxWidth(newWidth);
+            stackPane.setMaxHeight(newHeight);
         });
 
-        return background;
+        return stackPane;
     }
 
     public void pulse(String message) {
