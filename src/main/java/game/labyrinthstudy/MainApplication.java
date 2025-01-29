@@ -2,6 +2,7 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.study.FeedbackType;
 import game.labyrinthstudy.study.StatsRecorder;
 import game.labyrinthstudy.study.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
@@ -35,11 +36,13 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        boolean positive = false;
+
         this.stage = stage;
         this.tickListeners = new HashSet<>();
 
         this.fileManager = new FileManager();
-        this.studyFlowManager = new StudyFlowManager(this);
+        this.studyFlowManager = new StudyFlowManager(this, positive);
         this.registerTickListener(studyFlowManager);
 
         Maze maze1 = getMaze("Maze 1.txt");
@@ -48,8 +51,9 @@ public class MainApplication extends Application {
         Maze practiceMaze = getMaze("practice.txt");
         assert(maze1 != null && maze2 != null && practiceMaze != null);
 
+        List<FeedbackType> feedbackTypes = FeedbackType.filterFeedbackTypes(positive, !positive);
         List<Maze> mazes = Arrays.asList(maze2, maze1);
-        studyFlowManager.start(mazes, practiceMaze);
+        studyFlowManager.start(mazes, feedbackTypes, practiceMaze);
 
         // Set window properties
         stage.setTitle("Labyrinth study");

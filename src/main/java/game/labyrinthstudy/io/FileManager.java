@@ -3,6 +3,7 @@ package game.labyrinthstudy.io;
 import game.labyrinthstudy.game.AdjacencyList;
 import game.labyrinthstudy.game.Location;
 import game.labyrinthstudy.game.Maze;
+import game.labyrinthstudy.study.FeedbackType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,10 +15,8 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    private static String POSITIVE_FILE = "feedback_positive.txt", NEGATIVE_FILE = "feedback_negative.txt";
-
-    public List<String> readFeedbackSentences(boolean positive) {
-        String fileName = positive ? POSITIVE_FILE : NEGATIVE_FILE;
+    public List<String> readFeedbackSentences(FeedbackType feedbackType) {
+        String fileName = feedbackType.fileName();
 
         Scanner fileScanner = null;
         try {

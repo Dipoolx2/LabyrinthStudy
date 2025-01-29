@@ -1,6 +1,7 @@
 package game.labyrinthstudy.gui;
 
 import game.labyrinthstudy.game.Maze;
+import game.labyrinthstudy.study.FeedbackType;
 import game.labyrinthstudy.study.StudyFlowManager;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -45,10 +46,11 @@ public class LandingPageScene extends Scene {
     private final StudyFlowManager studyFlowManager;
     private final HBox buttons;
     private final Collection<Maze> mazes;
+    private final Collection<FeedbackType> feedbackTypes;
 
-
-    public LandingPageScene(StudyFlowManager studyFlowManager, Collection<Maze> mazes, Maze practiceMaze) {
+    public LandingPageScene(StudyFlowManager studyFlowManager, Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes, Maze practiceMaze) {
         super(new StackPane());
+        this.feedbackTypes = feedbackTypes;
         this.practiceMaze = practiceMaze;
         this.studyFlowManager = studyFlowManager;
         this.mazes = mazes;
@@ -127,7 +129,7 @@ public class LandingPageScene extends Scene {
         });
 
         stackPane.setOnMouseClicked(event -> {
-            studyFlowManager.startStudy(mazes);
+            studyFlowManager.startStudy(mazes, feedbackTypes);
         });
 
         return stackPane;

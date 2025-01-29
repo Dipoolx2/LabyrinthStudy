@@ -17,7 +17,12 @@ public class StudyFlowManager implements TickListener {
 
     private final MainApplication app;
 
+    private final boolean positive;
+
     private final Queue<Maze> mazes;
+    private final Queue<FeedbackType> feedbackTypes;
+    private final List<FeedbackType> allFeedbackTypes;
+
     private final Map<Maze, StatsRecorder> recorders;
     private final Map<Maze, MazeResults> results;
     private final Map<Maze, PlayerController> playerControllers;
@@ -28,9 +33,12 @@ public class StudyFlowManager implements TickListener {
     private LandingPageScene landingPageScene;
     private Maze currentMaze;
 
-    public StudyFlowManager(MainApplication app) {
+    public StudyFlowManager(MainApplication app, boolean positive) {
         this.app = app;
+        this.positive = positive;
 
+        this.allFeedbackTypes = new ArrayList<>();
+        this.feedbackTypes = new LinkedList<>();
         this.mazes = new LinkedList<>();
         this.recorders = new HashMap<>();
         this.results = new HashMap<>();
@@ -44,15 +52,18 @@ public class StudyFlowManager implements TickListener {
 
     }
 
-    public void start(Collection<Maze> mazes, Maze practiceMaze) {
-        this.landingPageScene = new LandingPageScene(this, mazes, practiceMaze);
+    public void start(Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes, Maze practiceMaze) {
+        this.landingPageScene = new LandingPageScene(this, mazes, feedbackTypes, practiceMaze);
         this.app.triviallySetScene(landingPageScene);
 //        this.app.triviallySetScene(generateEndScene());
         this.practiceMaze = practiceMaze;
     }
 
-    public void startStudy(Collection<Maze> mazes) {
+    public void startStudy(Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes) {
         this.mazes.addAll(mazes);
+        this.feedbackTypes.addAll(feedbackTypes);
+        this.allFeedbackTypes.addAll(feedbackTypes);
+
         if (this.mazes.isEmpty()) {
             this.finishStudy();
         }
@@ -113,16 +124,20 @@ public class StudyFlowManager implements TickListener {
     }
 
     private StatsRecorder startMazeAndRecordings(Maze maze) {
-        final boolean positive = true;
-
         StatsRecorder statsRecorder = new StatsRecorder();
         this.currentMaze = maze;
 
         GameScene newGameScene = createGameScene(maze, statsRecorder, false);
         PlayerController playerController = app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder, false);
 
-        Collection<String> feedbacks = this.app.fileManager.readFeedbackSentences(positive);
+        if (this.feedbackTypes.isEmpty()) refillFeedbackTypes();
+        FeedbackType feedbackType = this.feedbackTypes.poll();
+
+        Collection<String> feedbacks = this.app.fileManager.readFeedbackSentences(feedbackType);
         FeedbackController feedbackController = new FeedbackController(newGameScene.getFeedbackHudPane(), feedbacks);
+
+        // logging
+        System.out.println("Current feedback type: " + feedbackType);
 
         this.feedbackControllers.put(maze, feedbackController);
         this.playerControllers.put(maze, playerController);
@@ -140,6 +155,11 @@ public class StudyFlowManager implements TickListener {
     public String getCurrentMazeName() {
         if (this.currentMaze == null) return "None";
         return this.currentMaze.toString();
+    }
+
+    private void refillFeedbackTypes() {
+        this.feedbackTypes.clear();
+        this.feedbackTypes.addAll(this.allFeedbackTypes);
     }
 
     @Override
