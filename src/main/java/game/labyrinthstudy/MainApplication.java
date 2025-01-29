@@ -56,7 +56,7 @@ public class MainApplication extends Application {
         studyFlowManager.start(mazes, feedbackTypes, practiceMaze);
 
         // Set window properties
-        stage.setTitle("Labyrinth study");
+        stage.setTitle("Maze study");
         stage.setResizable(false);
 
         startMainLoop();
