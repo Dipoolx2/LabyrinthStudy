@@ -30,8 +30,9 @@ public class EndPageScene extends Scene {
 
     private final StudyFlowManager studyFlowManager;
 
-    public EndPageScene(Map<Maze, MazeResults> resultSet, StudyFlowManager studyFlowManager) {
+    public EndPageScene(Map<Maze, MazeResults> resultSet, String textualResults, StudyFlowManager studyFlowManager) {
         super(new StackPane());
+        System.out.println(textualResults);
         StackPane root = (StackPane) getRoot();
         this.studyFlowManager = studyFlowManager;
 

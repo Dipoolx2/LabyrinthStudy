@@ -79,12 +79,28 @@ public class StudyFlowManager implements TickListener {
             result.getValue().computeAllResults(maze, playerControllers.get(maze));
         }
 
-        Scene endScene = generateEndScene();
+        String textualResults = getTextualStudyResults();
+
+        Scene endScene = generateEndScene(textualResults);
         this.app.triviallySetScene(endScene);
     }
 
-    private Scene generateEndScene() {
-        return new EndPageScene(this.results, this);
+    private String getTextualStudyResults() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("-------- RESULTS START --------").append("\n");
+
+        stringBuilder.append("Group: ").append(this.positive ? 1 : 2).append("\n\n");
+        for (MazeResults result : this.results.values()) {
+            stringBuilder.append(result.toString()).append("\n");
+        }
+
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1); // Get rid of last newline
+        stringBuilder.append("-------- RESULTS END --------");
+        return stringBuilder.toString();
+    }
+
+    private Scene generateEndScene(String textualResults) {
+        return new EndPageScene(this.results, textualResults, this);
     }
 
     public void finishMaze(boolean gaveUp, boolean practiceMaze) {
@@ -133,11 +149,9 @@ public class StudyFlowManager implements TickListener {
         if (this.feedbackTypes.isEmpty()) refillFeedbackTypes();
         FeedbackType feedbackType = this.feedbackTypes.poll();
 
+        assert feedbackType != null;
         Collection<String> feedbacks = this.app.fileManager.readFeedbackSentences(feedbackType);
         FeedbackController feedbackController = new FeedbackController(newGameScene.getFeedbackHudPane(), feedbacks);
-
-        // logging
-        System.out.println("Current feedback type: " + feedbackType);
 
         this.feedbackControllers.put(maze, feedbackController);
         this.playerControllers.put(maze, playerController);
