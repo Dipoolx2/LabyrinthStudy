@@ -17,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.util.Collection;
+import java.util.List;
 
 import static game.labyrinthstudy.MainApplication.HEIGHT;
 import static game.labyrinthstudy.MainApplication.WIDTH;
@@ -45,10 +46,10 @@ public class LandingPageScene extends Scene {
     private final Maze practiceMaze;
     private final StudyFlowManager studyFlowManager;
     private final HBox buttons;
-    private final Collection<Maze> mazes;
-    private final Collection<FeedbackType> feedbackTypes;
+    private final List<Maze> mazes;
+    private final List<FeedbackType> feedbackTypes;
 
-    public LandingPageScene(StudyFlowManager studyFlowManager, Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes, Maze practiceMaze) {
+    public LandingPageScene(StudyFlowManager studyFlowManager, List<Maze> mazes, List<FeedbackType> feedbackTypes, Maze practiceMaze) {
         super(new StackPane());
         this.feedbackTypes = feedbackTypes;
         this.practiceMaze = practiceMaze;

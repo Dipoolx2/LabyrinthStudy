@@ -32,7 +32,7 @@ public class EndPageScene extends Scene {
 
     private final StudyFlowManager studyFlowManager;
 
-    public EndPageScene(Map<Maze, MazeResults> resultSet, String textualResults, StudyFlowManager studyFlowManager) {
+    public EndPageScene(List<Maze> mazeOrdering, Map<Maze, MazeResults> resultSet, String textualResults, StudyFlowManager studyFlowManager) {
         super(new StackPane());
         StackPane root = (StackPane) getRoot();
         this.studyFlowManager = studyFlowManager;
@@ -50,8 +50,9 @@ public class EndPageScene extends Scene {
         Label titleLabel = getTitleLabel();
 
         List<StackPane> resultsStackPanes = new ArrayList<>();
-        for (Map.Entry<Maze, MazeResults> mazeResult : resultSet.entrySet()) {
-            resultsStackPanes.add(generateResultStackPane(mazeResult.getKey(), mazeResult.getValue()));
+        for (Maze maze : mazeOrdering) {
+            MazeResults mazeResult = resultSet.get(maze);
+            resultsStackPanes.add(generateResultStackPane(maze, mazeResult));
         }
 
         HBox resultsContainers = new HBox(20);

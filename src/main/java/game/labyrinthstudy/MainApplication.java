@@ -52,7 +52,7 @@ public class MainApplication extends Application {
         assert(maze1 != null && maze2 != null && practiceMaze != null);
 
         List<FeedbackType> feedbackTypes = FeedbackType.filterFeedbackTypes(positive, !positive);
-        List<Maze> mazes = Arrays.asList(maze2, maze1);
+        List<Maze> mazes = Arrays.asList(maze1, maze2);
         studyFlowManager.start(mazes, feedbackTypes, practiceMaze);
 
         // Set window properties

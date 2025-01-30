@@ -19,6 +19,8 @@ public class StudyFlowManager implements TickListener {
 
     private final boolean positive;
 
+    private final List<Maze> allMazes;
+
     private final Queue<Maze> mazes;
     private final Queue<FeedbackType> feedbackTypes;
     private final List<FeedbackType> allFeedbackTypes;
@@ -37,6 +39,7 @@ public class StudyFlowManager implements TickListener {
         this.app = app;
         this.positive = positive;
 
+        this.allMazes = new ArrayList<>();
         this.allFeedbackTypes = new ArrayList<>();
         this.feedbackTypes = new LinkedList<>();
         this.mazes = new LinkedList<>();
@@ -52,15 +55,16 @@ public class StudyFlowManager implements TickListener {
 
     }
 
-    public void start(Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes, Maze practiceMaze) {
+    public void start(List<Maze> mazes, List<FeedbackType> feedbackTypes, Maze practiceMaze) {
         this.landingPageScene = new LandingPageScene(this, mazes, feedbackTypes, practiceMaze);
         this.app.triviallySetScene(landingPageScene);
-//        this.app.triviallySetScene(generateEndScene());
         this.practiceMaze = practiceMaze;
     }
 
-    public void startStudy(Collection<Maze> mazes, Collection<FeedbackType> feedbackTypes) {
-        this.mazes.addAll(mazes);
+    public void startStudy(List<Maze> mazes, List<FeedbackType> feedbackTypes) {
+        this.allMazes.addAll(mazes);
+        this.mazes.addAll(this.getShuffledMazes(mazes));
+
         this.feedbackTypes.addAll(feedbackTypes);
         this.allFeedbackTypes.addAll(feedbackTypes);
 
@@ -74,9 +78,9 @@ public class StudyFlowManager implements TickListener {
     }
 
     private void finishStudy() {
-        for (Map.Entry<Maze, MazeResults> result : this.results.entrySet()) {
-            Maze maze = result.getKey();
-            result.getValue().computeAllResults(maze, playerControllers.get(maze));
+        for (Maze maze : this.allMazes) {
+            MazeResults result = this.results.get(maze);
+            result.computeAllResults(maze, playerControllers.get(maze));
         }
 
         String textualResults = getTextualStudyResults();
@@ -90,7 +94,8 @@ public class StudyFlowManager implements TickListener {
         stringBuilder.append("-------- RESULTS START --------").append("\n");
 
         stringBuilder.append("Group: ").append(this.positive ? 1 : 2).append("\n\n");
-        for (MazeResults result : this.results.values()) {
+        for (Maze maze : this.allMazes) {
+            MazeResults result = results.get(maze);
             stringBuilder.append(result.toString()).append("\n");
         }
 
@@ -100,7 +105,7 @@ public class StudyFlowManager implements TickListener {
     }
 
     private Scene generateEndScene(String textualResults) {
-        return new EndPageScene(this.results, textualResults, this);
+        return new EndPageScene(this.allMazes, this.results, textualResults, this);
     }
 
     public void finishMaze(boolean gaveUp, boolean practiceMaze) {
@@ -127,6 +132,12 @@ public class StudyFlowManager implements TickListener {
         }
 
         finishStudy();
+    }
+
+    private List<Maze> getShuffledMazes(List<Maze> allMazes) {
+        List<Maze> shuffledMazes = new ArrayList<>(allMazes);
+        Collections.shuffle(shuffledMazes);
+        return shuffledMazes;
     }
 
     public void playPracticeMaze() {
@@ -173,7 +184,11 @@ public class StudyFlowManager implements TickListener {
 
     private void refillFeedbackTypes() {
         this.feedbackTypes.clear();
-        this.feedbackTypes.addAll(this.allFeedbackTypes);
+
+        List<FeedbackType> shuffledFeedbackTypes = new ArrayList<>(this.allFeedbackTypes);
+        Collections.shuffle(shuffledFeedbackTypes);
+
+        this.feedbackTypes.addAll(shuffledFeedbackTypes);
     }
 
     @Override
