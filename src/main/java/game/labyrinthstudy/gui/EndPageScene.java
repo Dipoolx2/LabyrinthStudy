@@ -21,7 +21,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import static game.labyrinthstudy.MainApplication.HEIGHT;
 import static game.labyrinthstudy.MainApplication.WIDTH;
@@ -32,7 +31,6 @@ public class EndPageScene extends Scene {
 
     public EndPageScene(Map<Maze, MazeResults> resultSet, String textualResults, StudyFlowManager studyFlowManager) {
         super(new StackPane());
-        System.out.println(textualResults);
         StackPane root = (StackPane) getRoot();
         this.studyFlowManager = studyFlowManager;
 
@@ -56,6 +54,8 @@ public class EndPageScene extends Scene {
         HBox resultsContainers = new HBox(20);
         resultsContainers.getChildren().addAll(resultsStackPanes);
 
+        //StackPane copyButton = getCopyButton(textualResults);
+
         Label infoLabel = getInfoLabel();
         Hyperlink surveyLink = getSurveyLink();
 
@@ -77,6 +77,22 @@ public class EndPageScene extends Scene {
         resultsContainers.setAlignment(Pos.CENTER);
 
         root.getChildren().addAll(rectangle, resultGroupContainer);
+    }
+
+    private StackPane getCopyButton() {
+        int width = 70, height = 50;
+        Rectangle buttonBackground = new Rectangle(width, height);
+        buttonBackground.setFill(Color.YELLOW);
+        buttonBackground.setArcWidth(20);
+        buttonBackground.setArcHeight(20);
+        buttonBackground.setStrokeWidth(2);
+        buttonBackground.setStroke(Color.ANTIQUEWHITE);
+
+        Label buttonLabel = new Label("Copy to clipboard");
+        buttonLabel.setFont(Font.font("Helvetica", 30));
+        buttonLabel.setTextFill(Color.ANTIQUEWHITE);
+
+        return new StackPane();
     }
 
     private Label getInfoLabel() {
