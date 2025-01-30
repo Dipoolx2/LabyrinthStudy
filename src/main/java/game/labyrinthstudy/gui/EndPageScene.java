@@ -6,6 +6,7 @@ import game.labyrinthstudy.study.StudyFlowManager;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -16,7 +17,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import java.awt.Desktop;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,7 @@ public class EndPageScene extends Scene {
         Rectangle rectangle = new Rectangle(WIDTH, HEIGHT);
         rectangle.setFill(Color.DARKGRAY.darker().darker());
 
-        Rectangle resultsContainerArea = new Rectangle(WIDTH / 1.5, HEIGHT / 1.40);
+        Rectangle resultsContainerArea = new Rectangle(WIDTH / 1.5, HEIGHT / 1.30);
         resultsContainerArea.setFill(Color.DARKGRAY.darker().darker().darker().darker());
         resultsContainerArea.setStroke(Color.LIGHTYELLOW.darker());
         resultsContainerArea.setStrokeWidth(3);
@@ -54,7 +57,7 @@ public class EndPageScene extends Scene {
         HBox resultsContainers = new HBox(20);
         resultsContainers.getChildren().addAll(resultsStackPanes);
 
-        //StackPane copyButton = getCopyButton(textualResults);
+        StackPane copyButton = getCopyButton(textualResults);
 
         Label infoLabel = getInfoLabel();
         Hyperlink surveyLink = getSurveyLink();
@@ -64,7 +67,7 @@ public class EndPageScene extends Scene {
 
         HBox buttons = getExitButtons();
 
-        VBox pageContent = new VBox(titleLabel, resultsContainers, infoPanel, buttons);
+        VBox pageContent = new VBox(titleLabel, resultsContainers, copyButton, infoPanel, buttons);
         pageContent.setAlignment(Pos.TOP_CENTER);
         pageContent.setTranslateY(30);
         pageContent.setSpacing(30);
@@ -79,20 +82,39 @@ public class EndPageScene extends Scene {
         root.getChildren().addAll(rectangle, resultGroupContainer);
     }
 
-    private StackPane getCopyButton() {
-        int width = 70, height = 50;
+    private StackPane getCopyButton(String textualResults) {
+        int width = 120, height = 30;
         Rectangle buttonBackground = new Rectangle(width, height);
-        buttonBackground.setFill(Color.YELLOW);
+        buttonBackground.setFill(Color.DARKGOLDENROD);
         buttonBackground.setArcWidth(20);
         buttonBackground.setArcHeight(20);
         buttonBackground.setStrokeWidth(2);
         buttonBackground.setStroke(Color.ANTIQUEWHITE);
 
         Label buttonLabel = new Label("Copy to clipboard");
-        buttonLabel.setFont(Font.font("Helvetica", 30));
+        buttonLabel.setFont(Font.font("Helvetica", 12));
         buttonLabel.setTextFill(Color.ANTIQUEWHITE);
 
-        return new StackPane();
+        StackPane copyButton = new StackPane(buttonBackground, buttonLabel);
+        copyButton.setMaxWidth(width);
+        copyButton.setMaxHeight(height);
+        copyButton.setAlignment(Pos.CENTER);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sent to clipboard!");
+        alert.setHeaderText(null);
+        alert.setContentText("Copied results to clipboard!");
+
+        copyButton.setCursor(Cursor.HAND);
+        copyButton.setOnMouseClicked(e -> {
+            StringSelection stringSelection = new StringSelection(textualResults);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+
+            alert.showAndWait();
+        });
+
+        return copyButton;
     }
 
     private Label getInfoLabel() {
