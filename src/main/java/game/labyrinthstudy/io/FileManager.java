@@ -7,6 +7,7 @@ import game.labyrinthstudy.study.FeedbackType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,16 +36,20 @@ public class FileManager {
     }
 
     private Scanner getFileScanner(String fileName) throws FileNotFoundException {
-        URL url = this.getClass().getClassLoader().getResource(fileName);
-        System.out.println("Attempting to get file scanner for " + fileName);
-        File file = null;
-        try {
-            assert url != null;
-            file = new File(url.toURI());
-        } catch (URISyntaxException e) {
-            file = new File(url.getPath());
+        InputStream inputStream = this.getClass().getClassLoader()
+                .getResourceAsStream("resources/" + fileName);
+
+        if (inputStream == null) {
+            // Try without "resources/" prefix as an alternative
+            inputStream = this.getClass().getClassLoader()
+                    .getResourceAsStream(fileName);
         }
-        return new Scanner(file);
+
+        if (inputStream == null) {
+            throw new FileNotFoundException("Could not find resource: " + fileName);
+        }
+
+        return new Scanner(inputStream);
     }
 
     public Maze readMazeFromFile(String fileName) throws FileNotFoundException {

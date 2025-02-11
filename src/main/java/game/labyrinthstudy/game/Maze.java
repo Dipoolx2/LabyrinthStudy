@@ -15,7 +15,7 @@ public class Maze {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
 
-        this.name = name;
+        this.name = name.split("_")[0];
         this.uuid = UUID.randomUUID();
     }
 
