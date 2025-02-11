@@ -8,10 +8,8 @@ public enum FeedbackType {
 
     EVALUATIVE_POSITIVE(true, false),
     COMPARATIVE_POSITIVE(true, false),
-    DESCRIPTIVE_POSITIVE(true, false),
     EVALUATIVE_NEGATIVE(false, true),
-    COMPARATIVE_NEGATIVE(false, true),
-    DESCRIPTIVE_NEGATIVE(false, true);
+    COMPARATIVE_NEGATIVE(false, true);
 
     private final boolean positive, negative;
 

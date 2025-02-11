@@ -1,3 +1,11 @@
-comparative negative 1
-comparative negative 2
-comparative negative 3
+50% of the participants already completed the maze, hurry up!
+Most of the participants made a lot more progress in this time, keep up!
+Ouch! You’re way behind the other participants!
+You’re in the bottom half of all the participants...
+You’re in the bottom 10% of all the participants, that’s not a great score.
+The majority of participants are further along by now.
+The gap is growing: most participants are way ahead by now.
+Your performance is not something to be proud of compared to the other participants.
+You’re worse than most of the participants.
+Unfortunately you’re one of the furthest behind.
+The other participants made it a lot further than you, you’re definitely not among the best!

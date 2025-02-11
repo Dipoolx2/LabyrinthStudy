@@ -1,3 +1,20 @@
-evaluative negative 1
-evaluative negative 2
-evaluative negative 3
+It seems like you are not making much progress, Try harder!
+You are a bit too slow!
+Your performance is not really outstanding...
+With this speed it will be hard to reach the exit!
+Your progress is not speeding up!
+This is not going very well...
+It seems like this is not really your thing, or is it?
+Do you need help?
+You are not doing very good, is everything alright?
+Are you not done yet?
+It seems like you are not doing very well, you should improve!
+Is this all you can do?
+You are a bit slow, speed up!
+Are you really trying?
+You are way too slow!
+You are going nowhere!
+It is not going great...
+Will you ever find the exit?
+The clock is ticking, speed up!
+You should be done by now!

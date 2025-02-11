@@ -14,10 +14,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MainApplication extends Application {
 
@@ -46,14 +45,21 @@ public class MainApplication extends Application {
         this.studyFlowManager = new StudyFlowManager(this, positive);
         this.registerTickListener(studyFlowManager);
 
-        Maze maze1 = getMaze("Maze 1.txt");
-        Maze maze2 = getMaze("Maze 2.txt");
+        String[] solvableMazes = {"maze1_solvable", "maze2_solvable", "maze3_solvable", "maze4_solvable", "maze5_solvable"};
+        String[] unsolvableMazes = {"maze1_nosolve", "maze2_nosolve", "maze3_nosolve", "maze4_nosolve", "maze5_nosolve"};
+
+        int[] mazeIndices = getRandomIndices();
+        String[] mazeNames = getEqualMazesOfEach(mazeIndices, solvableMazes, unsolvableMazes);
+        System.out.println(Arrays.toString(mazeNames));
+
+        List<Maze> mazes = new ArrayList<>();
+        for (String mazeName : mazeNames) {
+            mazes.add(getMaze(mazeName + ".txt"));
+        }
 
         Maze practiceMaze = getMaze("practice.txt");
-        assert(maze1 != null && maze2 != null && practiceMaze != null);
 
         List<FeedbackType> feedbackTypes = FeedbackType.filterFeedbackTypes(positive, !positive);
-        List<Maze> mazes = Arrays.asList(maze1, maze2);
         studyFlowManager.start(mazes, feedbackTypes, practiceMaze);
 
         // Set window properties
@@ -62,6 +68,34 @@ public class MainApplication extends Application {
 
         startMainLoop();
         stage.show();
+    }
+
+    private String[] getEqualMazesOfEach(int[] indices, String[] solvableMazes, String[] unsolvableMazes) {
+        List<String> mazes = new ArrayList<>();
+
+        int index = 0;
+        while (index < indices.length / 2) {
+            mazes.add(solvableMazes[indices[index]]);
+            index++;
+        }
+
+        while (index < indices.length) {
+            mazes.add(unsolvableMazes[indices[index]]);
+            index++;
+        }
+
+        Collections.shuffle(mazes);
+        return mazes.toArray(new String[4]);
+    }
+
+    private int[] getRandomIndices() {
+        List<Integer> digits = IntStream.range(0,5).boxed().collect(Collectors.toList());
+        Collections.shuffle(digits);
+        int[] numbers = new int[4];
+        for(int i=0;i<4;i++){
+            numbers[i] = digits.get(i);
+        }
+        return numbers;
     }
 
     public void restartProgram() {

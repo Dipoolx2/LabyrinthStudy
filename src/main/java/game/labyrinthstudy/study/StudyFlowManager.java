@@ -109,13 +109,14 @@ public class StudyFlowManager implements TickListener {
     }
 
     public void finishMaze(boolean gaveUp, boolean practiceMaze) {
-        StatsRecorder statsRecorder = this.recorders.get(practiceMaze ? this.practiceMaze : this.currentMaze);
-        statsRecorder.stopRecordings();
         if (practiceMaze) {
             this.recorders.remove(this.practiceMaze);
             this.app.triviallySetScene(this.landingPageScene);
             return;
         }
+
+        StatsRecorder statsRecorder = this.recorders.get(this.currentMaze);
+        statsRecorder.stopRecordings();
 
         FeedbackController feedbackController = this.feedbackControllers.get(this.currentMaze);
         feedbackController.stop();

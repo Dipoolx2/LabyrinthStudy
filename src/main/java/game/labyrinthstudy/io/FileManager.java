@@ -36,6 +36,7 @@ public class FileManager {
 
     private Scanner getFileScanner(String fileName) throws FileNotFoundException {
         URL url = this.getClass().getClassLoader().getResource(fileName);
+        System.out.println("Attempting to get file scanner for " + fileName);
         File file = null;
         try {
             assert url != null;
