@@ -8,6 +8,7 @@ import game.labyrinthstudy.study.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -63,6 +64,22 @@ public class MainApplication extends Application {
         stage.show();
     }
 
+    public void restartProgram() {
+        this.stage.close();
+        this.clearTickListeners();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public PlayerController activateGameScene(Scene scene, GameWindow gameWindow, Maze maze, StatsRecorder statsRecorder, boolean practiceMaze) {
         this.clearGameKeys(scene, this.playerController);
         this.deregisterTickListener(this.playerController);
@@ -80,6 +97,10 @@ public class MainApplication extends Application {
         return this.playerController;
     }
 
+    private void clearTickListeners() {
+        this.tickListeners.clear();
+    }
+
     private void deregisterTickListener(TickListener tickListener) {
         if (tickListener != null) {
             this.tickListeners.remove(tickListener);
@@ -94,6 +115,10 @@ public class MainApplication extends Application {
         // start game
         gameLoop = new GameLoop(this);
         gameLoop.start();
+    }
+
+    private void stopGameLoop() {
+        gameLoop.stop();
     }
 
     public void tick() {

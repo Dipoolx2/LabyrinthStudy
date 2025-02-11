@@ -52,7 +52,7 @@ public class StudyFlowManager implements TickListener {
     }
 
     public void restartStudy() {
-
+        this.app.restartProgram();
     }
 
     public void start(List<Maze> mazes, List<FeedbackType> feedbackTypes, Maze practiceMaze) {
