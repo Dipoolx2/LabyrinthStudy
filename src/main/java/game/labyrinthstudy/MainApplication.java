@@ -36,7 +36,7 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        boolean positive = false;
+        boolean positive = true;
 
         this.stage = stage;
         this.tickListeners = new HashSet<>();
@@ -56,6 +56,7 @@ public class MainApplication extends Application {
         for (String mazeName : mazeNames) {
             mazes.add(getMaze(mazeName + ".txt"));
         }
+
 
         Maze practiceMaze = getMaze("practice.txt");
 

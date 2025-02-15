@@ -24,6 +24,8 @@ public class DistanceCalculator {
                 return currentDistance;
             }
 
+            if (!adjacencyList.containsKey(current)) continue;
+
             for (Location neighbour : adjacencyList.get(current)) {
                 if (!distances.containsKey(neighbour)) {
                     distances.put(neighbour, currentDistance + 1);
