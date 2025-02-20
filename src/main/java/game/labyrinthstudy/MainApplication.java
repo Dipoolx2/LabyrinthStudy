@@ -36,7 +36,8 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        boolean positive = true;
+        Random random = new Random();
+        boolean positive = random.nextBoolean(); // Randomize feedback type
 
         this.stage = stage;
         this.tickListeners = new HashSet<>();
