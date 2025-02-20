@@ -18,6 +18,10 @@ public enum FeedbackType {
         this.negative = negative;
     }
 
+    public String descriptiveForm() {
+        return this.name().split("_")[0].toLowerCase();
+    }
+
     public String fileName() {
         return this.name().toLowerCase()+".txt";
     }

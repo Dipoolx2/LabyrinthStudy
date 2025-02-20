@@ -142,7 +142,7 @@ public class StudyFlowManager implements TickListener {
     }
 
     public void playPracticeMaze() {
-        StatsRecorder statsRecorder = new StatsRecorder();
+        StatsRecorder statsRecorder = new StatsRecorder(FeedbackType.COMPARATIVE_POSITIVE);
         this.recorders.put(this.practiceMaze, statsRecorder);
 
         GameScene gameScene = createGameScene(practiceMaze, statsRecorder, true);
@@ -152,16 +152,17 @@ public class StudyFlowManager implements TickListener {
     }
 
     private StatsRecorder startMazeAndRecordings(Maze maze) {
-        StatsRecorder statsRecorder = new StatsRecorder();
+        if (this.feedbackTypes.isEmpty()) refillFeedbackTypes();
+
+        FeedbackType feedbackType = this.feedbackTypes.poll();
+        StatsRecorder statsRecorder = new StatsRecorder(feedbackType);
+        assert feedbackType != null;
+
         this.currentMaze = maze;
 
         GameScene newGameScene = createGameScene(maze, statsRecorder, false);
         PlayerController playerController = app.activateGameScene(newGameScene, newGameScene.getGameWindow(), maze, statsRecorder, false);
 
-        if (this.feedbackTypes.isEmpty()) refillFeedbackTypes();
-        FeedbackType feedbackType = this.feedbackTypes.poll();
-
-        assert feedbackType != null;
         Collection<String> feedbacks = this.app.fileManager.readFeedbackSentences(feedbackType);
         FeedbackController feedbackController = new FeedbackController(newGameScene.getFeedbackHudPane(), feedbacks);
 

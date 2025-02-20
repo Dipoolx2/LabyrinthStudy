@@ -13,10 +13,13 @@ public class StatsRecorder {
 
     private boolean active;
 
-    public StatsRecorder() {
+    private final FeedbackType feedbackType;
+
+    public StatsRecorder(FeedbackType feedbackType) {
         this.active = false;
         this.lastTick = 0;
 
+        this.feedbackType = feedbackType;
         this.timePassedMs = new SimpleLongProperty(0);
         this.distanceWalked = new SimpleDoubleProperty(0);
         this.keystrokesCount = new SimpleIntegerProperty(0);
@@ -48,7 +51,7 @@ public class StatsRecorder {
     }
 
     public MazeResults saveRecordings(boolean gaveUp) {
-        return new MazeResults(this, gaveUp);
+        return new MazeResults(this, this.feedbackType, gaveUp);
     }
 
     public double getDistanceWalked() {

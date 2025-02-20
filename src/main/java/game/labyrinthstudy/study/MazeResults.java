@@ -10,17 +10,19 @@ public class MazeResults {
     private final int keystrokesPressed;
     private final long timePassed;
     private final boolean gaveUp;
+    private FeedbackType feedbackType;
 
     private String mazeName;
     private boolean finalResultsAvailable = false;
     private int distanceToEnd;
     private int distanceFromStart;
 
-    public MazeResults(StatsRecorder statsRecorder, boolean gaveUp) {
+    public MazeResults(StatsRecorder statsRecorder, FeedbackType feedbackType, boolean gaveUp) {
         this.distanceWalked = statsRecorder.getDistanceWalked();
         this.keystrokesPressed = statsRecorder.getKeystrokesCount();
         this.timePassed = statsRecorder.getTimePassedMs();
         this.gaveUp = gaveUp;
+        this.feedbackType = feedbackType;
     }
 
     public void computeAllResults(Maze maze, PlayerController playerController) {
@@ -73,7 +75,7 @@ public class MazeResults {
         String timePassed = String.format("%02d:%02d.%03d", minutes, seconds, millis);
 
         StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append("Maze: ").append(this.mazeName).append("\n");
+        strBuilder.append("Maze: ").append(this.mazeName).append(" (").append(this.feedbackType.descriptiveForm()).append(")\n");
         if (finalResultsAvailable)
             strBuilder.append("     Gave up: ").append(this.gaveUp).append("\n");
         strBuilder.append("     Time passed: ").append(timePassed).append("\n");

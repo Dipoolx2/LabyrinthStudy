@@ -37,7 +37,7 @@ public class FeedbackController {
 
         // Set up the Timeline
         this.currentTimeline = new Timeline(
-            new KeyFrame(Duration.seconds(10), e -> {
+            new KeyFrame(Duration.seconds(20), e -> {
                 if (!this.started) {
                     this.stop();
                     return;
