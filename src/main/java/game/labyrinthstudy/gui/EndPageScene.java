@@ -1,5 +1,6 @@
 package game.labyrinthstudy.gui;
 
+import game.labyrinthstudy.UninstallerService;
 import game.labyrinthstudy.game.Maze;
 import game.labyrinthstudy.study.MazeResults;
 import game.labyrinthstudy.study.StudyFlowManager;
@@ -139,10 +140,7 @@ public class EndPageScene extends Scene {
     }
 
     private StackPane getExitAndUninstallButton() {
-        Runnable action = () -> {
-            System.exit(0);
-            // Run uninstaller
-        };
+        Runnable action = UninstallerService::startUninstaller;
         return getButton(Color.INDIANRED, 200, "Exit and Uninstall", action);
     }
 
@@ -189,7 +187,7 @@ public class EndPageScene extends Scene {
     }
 
     private Hyperlink getSurveyLink() {
-        String linkText = "https://www.google.com";
+        String linkText = "https://psychru.qualtrics.com/jfe/form/SV_7Nx8yH5bNytfbPo";
         Hyperlink link = new Hyperlink(linkText);
 
         link.setOnAction(event -> {
