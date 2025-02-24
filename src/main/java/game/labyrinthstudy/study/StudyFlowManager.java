@@ -9,7 +9,12 @@ import game.labyrinthstudy.gui.EndPageScene;
 import game.labyrinthstudy.gui.GameHudPane;
 import game.labyrinthstudy.gui.GameScene;
 import game.labyrinthstudy.gui.LandingPageScene;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.*;
 
@@ -124,13 +129,7 @@ public class StudyFlowManager implements TickListener {
         MazeResults results = statsRecorder.saveRecordings(gaveUp);
         this.results.put(currentMaze, results);
 
-        if (!mazes.isEmpty()) {
-            Maze nextMaze = this.mazes.remove();
-            StatsRecorder newRecorder = this.startMazeAndRecordings(nextMaze);
-            this.recorders.put(nextMaze, newRecorder);
-
-            return;
-        }
+        if (app.handleNextMaze(this.recorders, this.mazes)) return;
 
         finishStudy();
     }
@@ -151,7 +150,7 @@ public class StudyFlowManager implements TickListener {
         statsRecorder.startRecordings();
     }
 
-    private StatsRecorder startMazeAndRecordings(Maze maze) {
+    public StatsRecorder startMazeAndRecordings(Maze maze) {
         if (this.feedbackTypes.isEmpty()) refillFeedbackTypes();
 
         FeedbackType feedbackType = this.feedbackTypes.poll();

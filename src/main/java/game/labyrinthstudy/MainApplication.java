@@ -2,16 +2,21 @@ package game.labyrinthstudy;
 
 import game.labyrinthstudy.game.*;
 import game.labyrinthstudy.graphics.GameWindow;
+import game.labyrinthstudy.gui.TransitionScene;
 import game.labyrinthstudy.study.FeedbackType;
 import game.labyrinthstudy.study.StatsRecorder;
 import game.labyrinthstudy.study.StudyFlowManager;
 import game.labyrinthstudy.io.FileManager;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -141,6 +146,29 @@ public class MainApplication extends Application {
         if (tickListener != null) {
             this.tickListeners.remove(tickListener);
         }
+    }
+
+    public boolean handleNextMaze(Map<Maze, StatsRecorder> recorders, Queue<Maze> mazes) {
+        if (!mazes.isEmpty()) {
+            // Create transition scene
+            Scene transitionScene = new TransitionScene();
+
+            // Show the transition scene
+            stage.setScene(transitionScene);
+            stage.show();
+
+            // Delay for 3 seconds
+            PauseTransition pause = new PauseTransition(Duration.seconds(3));
+            pause.setOnFinished(event -> {
+                Maze nextMaze = mazes.remove();
+                StatsRecorder newRecorder = this.studyFlowManager.startMazeAndRecordings(nextMaze);
+                recorders.put(nextMaze, newRecorder);
+            });
+
+            pause.play();
+            return true;
+        }
+        return false;
     }
 
     public void triviallySetScene(Scene scene) {
