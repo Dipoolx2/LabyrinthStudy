@@ -99,7 +99,11 @@ public class PlayerController implements TickListener {
             KeyCode.A, new double[]{-1, 0},   // Left
             KeyCode.D, new double[]{1, 0},    // Right
             KeyCode.W, new double[]{0, -1},   // Up
-            KeyCode.S, new double[]{0, 1}     // Down
+            KeyCode.S, new double[]{0, 1},     // Down
+            KeyCode.LEFT, new double[]{-1, 0},   // Left
+            KeyCode.RIGHT, new double[]{1, 0},    // Right
+            KeyCode.UP, new double[]{0, -1},   // Up
+            KeyCode.DOWN, new double[]{0, 1}     // Down
     );
 
     public EventHandler<KeyEvent> keyPressed() {
