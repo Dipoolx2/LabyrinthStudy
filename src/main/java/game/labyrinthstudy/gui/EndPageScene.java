@@ -41,7 +41,7 @@ public class EndPageScene extends Scene {
         Rectangle rectangle = new Rectangle(WIDTH, HEIGHT);
         rectangle.setFill(Color.DARKGRAY.darker().darker());
 
-        Rectangle resultsContainerArea = new Rectangle(WIDTH / 1.5, HEIGHT / 1.30);
+        Rectangle resultsContainerArea = new Rectangle(WIDTH / 1.4, HEIGHT / 1.30);
         resultsContainerArea.setFill(Color.DARKGRAY.darker().darker().darker().darker());
         resultsContainerArea.setStroke(Color.LIGHTYELLOW.darker());
         resultsContainerArea.setStrokeWidth(3);
@@ -75,7 +75,7 @@ public class EndPageScene extends Scene {
         pageContent.setSpacing(30);
 
         StackPane resultGroupContainer = new StackPane(resultsContainerArea, pageContent);
-        resultGroupContainer.setMaxWidth(WIDTH / 1.5);
+        resultGroupContainer.setMaxWidth(WIDTH / 1.4);
         resultGroupContainer.setMaxHeight(HEIGHT / 1.5);
 
         resultGroupContainer.setAlignment(Pos.CENTER);
@@ -189,6 +189,8 @@ public class EndPageScene extends Scene {
     private Hyperlink getSurveyLink() {
         String linkText = "https://psychru.qualtrics.com/jfe/form/SV_7Nx8yH5bNytfbPo";
         Hyperlink link = new Hyperlink(linkText);
+        link.setScaleX(1.4);
+        link.setScaleY(1.4);
 
         link.setOnAction(event -> {
             try {

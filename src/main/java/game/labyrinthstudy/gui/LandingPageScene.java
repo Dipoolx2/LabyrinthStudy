@@ -28,7 +28,7 @@ public class LandingPageScene extends Scene {
             """
             Welcome, and thank you for participating in our study.
                                                                                                 
-            You will soon be presented with a series of mazes. Each maze will fall into one of two categories: it will either be
+            You will soon be presented with a series of four mazes. Each maze will fall into one of two categories: it will either be
             solvable or unsolvable.
             
             Your task is to determine whether the maze presented to you is solvable. If you believe a maze is solvable, attempt
@@ -37,6 +37,9 @@ public class LandingPageScene extends Scene {
             
             To navigate through the mazes, you may use the WASD keys or, alternatively, the arrow keys. The maze's start and end
             are marked yellow and green respectively. The "Maze Impossible" button is located near the bottom-left of the interface.
+            
+            Please note that you need to be eighteen years of age, or older, and you need to have signed the consent form to
+            start the study. Lastly, please don't forget to fill in the post-study questionnaire after completing the study.
             
             Before beginning, please complete the practice maze to familiarize yourself with the user interface and controls.
             We wish you the best of luck! Note: The study starts right after you press the "Start Study >" button.
@@ -61,7 +64,7 @@ public class LandingPageScene extends Scene {
         Rectangle rectangle = new Rectangle(WIDTH, HEIGHT);
         rectangle.setFill(Color.DARKGRAY.darker().darker());
 
-        Rectangle textContainerArea = new Rectangle(WIDTH / 1.5, HEIGHT / 1.46);
+        Rectangle textContainerArea = new Rectangle(WIDTH / 1.4, HEIGHT / 1.3);
         textContainerArea.setFill(Color.DARKGRAY.darker().darker().darker().darker());
         textContainerArea.setStroke(Color.LIGHTYELLOW.darker());
         textContainerArea.setStrokeWidth(3);
@@ -90,8 +93,8 @@ public class LandingPageScene extends Scene {
 
         StackPane container = new StackPane(textContainerArea, contents);
         container.setAlignment(Pos.CENTER);
-        container.setMaxWidth(WIDTH / 1.5);
-        container.setMaxHeight(HEIGHT / 1.5);
+        container.setMaxWidth(WIDTH / 1.4);
+        container.setMaxHeight(HEIGHT / 1.35);
 
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(rectangle, container);

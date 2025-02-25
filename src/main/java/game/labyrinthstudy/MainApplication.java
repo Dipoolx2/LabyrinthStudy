@@ -35,7 +35,7 @@ public class MainApplication extends Application {
 
     public static final int CELL_SIZE = 100;
     public static final int MAZE_SIZE = 30;
-    public static final int WIDTH = 1700, HEIGHT = 900;
+    public static final int WIDTH = 1600, HEIGHT = 900;
 
     private Stage stage;
 
@@ -108,12 +108,13 @@ public class MainApplication extends Application {
     public void restartProgram() {
         this.stage.close();
         this.clearTickListeners();
+        this.locationListenerManager = null;
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 try {
-                    start(new Stage());
+                    new MainApplication().start(new Stage());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
