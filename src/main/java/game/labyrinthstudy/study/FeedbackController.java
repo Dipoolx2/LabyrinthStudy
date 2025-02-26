@@ -27,6 +27,7 @@ public class FeedbackController {
 
     public void start() {
         this.started = true;
+        final int TIME_BETWEEN_FEEDBACK = 7;
 
         Runnable giveFeedbackRunnable = () -> {
             if (this.feedbackQueue.isEmpty()) {
@@ -37,7 +38,7 @@ public class FeedbackController {
 
         // Set up the Timeline
         this.currentTimeline = new Timeline(
-            new KeyFrame(Duration.seconds(20), e -> {
+            new KeyFrame(Duration.seconds(TIME_BETWEEN_FEEDBACK), e -> {
                 if (!this.started) {
                     this.stop();
                     return;

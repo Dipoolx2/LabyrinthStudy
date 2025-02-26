@@ -74,12 +74,14 @@ public class FeedbackHudPane extends StackPane {
     }
 
     public void pulse(String message) {
+        final double MSG_DELAY = 1.5 + message.split(" ").length * 0.20;
+
         this.messageLabel.setText(message);
         this.setOpacity(1.0);
 
         // Set up the FadeTransition
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), this);
-        fadeTransition.setDelay(Duration.seconds(3)); // Add a 3-second delay
+        fadeTransition.setDelay(Duration.seconds(MSG_DELAY)); // Add a 3-second delay
         fadeTransition.setFromValue(1.0); // Fully visible
         fadeTransition.setToValue(0.0);   // Fully transparent
         fadeTransition.setOnFinished(e -> System.out.println("Fade-out complete!"));
