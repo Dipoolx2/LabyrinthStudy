@@ -187,7 +187,7 @@ public class EndPageScene extends Scene {
     }
 
     private Hyperlink getSurveyLink() {
-        String linkText = "https://psychru.qualtrics.com/jfe/form/SV_7Nx8yH5bNytfbPo";
+        String linkText = "https://psychru.qualtrics.com/jfe/form/SV_bNTfLm9tL96k9yS";
         Hyperlink link = new Hyperlink(linkText);
         link.setScaleX(1.4);
         link.setScaleY(1.4);

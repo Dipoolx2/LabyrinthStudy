@@ -27,7 +27,7 @@ public class FeedbackController {
 
     public void start() {
         this.started = true;
-        final int TIME_BETWEEN_FEEDBACK = 7;
+        final int TIME_BETWEEN_FEEDBACK = 27;
 
         Runnable giveFeedbackRunnable = () -> {
             if (this.feedbackQueue.isEmpty()) {
