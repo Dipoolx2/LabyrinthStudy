@@ -32,8 +32,8 @@ public class LandingPageScene extends Scene {
             solvable or unsolvable.
             
             Your task is to determine whether the maze presented to you is solvable. If you believe a maze is solvable, attempt
-            to navigate through it to reach the exit. If you believe it is unsolvable, you may indicate this by selecting the
-            "Maze Impossible" button. Please note that once you select this option, you will not be able to retry the maze later on.
+            to navigate through it to reach the exit as fast as possible. If you believe it is unsolvable, you may indicate this by selecting 
+            the "Maze Impossible" button. Please note that once you select this option, you will not be able to retry the maze later on.
             
             To navigate through the mazes, you may use the WASD keys or, alternatively, the arrow keys. The maze's start and end
             are marked yellow and green respectively. The "Maze Impossible" button is located near the bottom-left of the interface.

@@ -23,6 +23,10 @@ public class LocationListenerManager implements TickListener {
         this.listeners.get(location).add(action);
     }
 
+    public void clearListeners() {
+        this.listeners.clear();
+    }
+
     @Override
     public void tick() {
         for (Location loc : this.listeners.keySet()) {

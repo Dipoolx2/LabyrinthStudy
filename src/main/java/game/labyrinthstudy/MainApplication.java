@@ -53,6 +53,8 @@ public class MainApplication extends Application {
 
         String[] solvableMazes = {"maze1_solvable", "maze2_solvable", "maze3_solvable", "maze4_solvable", "maze5_solvable"};
         String[] unsolvableMazes = {"maze1_nosolve", "maze2_nosolve", "maze3_nosolve", "maze4_nosolve", "maze5_nosolve"};
+//        String[] solvableMazes = {"practice", "practice", "practice", "practice", "practice"};
+//        String[] unsolvableMazes = {"practice", "practice", "practice", "practice", "practice"};
 
         int[] mazeIndices = getRandomIndices();
         String[] mazeNames = getEqualMazesOfEach(mazeIndices, solvableMazes, unsolvableMazes);
@@ -147,6 +149,10 @@ public class MainApplication extends Application {
         if (tickListener != null) {
             this.tickListeners.remove(tickListener);
         }
+    }
+
+    public void clearLocationListeners() {
+        this.locationListenerManager.clearListeners();
     }
 
     public boolean handleNextMaze(Map<Maze, StatsRecorder> recorders, Queue<Maze> mazes) {

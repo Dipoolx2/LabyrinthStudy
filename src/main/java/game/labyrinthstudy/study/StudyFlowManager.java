@@ -120,6 +120,8 @@ public class StudyFlowManager implements TickListener {
             return;
         }
 
+        app.clearLocationListeners();
+
         StatsRecorder statsRecorder = this.recorders.get(this.currentMaze);
         statsRecorder.stopRecordings();
 

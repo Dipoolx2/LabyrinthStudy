@@ -1,20 +1,18 @@
 It seems like you are not making much progress, try harder!
-You are a bit too slow!
+You're a bit too slow!
 Your performance is not really outstanding...
-With this speed it will be hard to reach the exit!
-Your progress is not speeding up!
+Your progress is not speeding up yet!
 This is not going very well...
-It seems like this is not really your thing, or is it?
-Do you need help?
-You are not doing very good, is everything alright?
-Are you not done yet?
+It looks like you've put a lot of work into this!
 It seems like you are not doing very well, you should improve!
-Is this all you can do?
-You are a bit slow, speed up!
-Are you really trying?
-You are way too slow!
-You are going nowhere!
+You are a bit too slow, speed up!
 It is not going great...
-Will you ever find the exit?
-The clock is ticking, speed up!
-You should be done by now!
+The clock keeps ticking... speed up!
+Is this your best shot?
+You seem a bit lost.
+With this speed it will be difficult to reach the exit in the near future!
+Maybe you could pick up the pace a bit?
+This maze seems to be quite a challenging task for you.
+Things don't seem to be going your way just yet.
+You are wasting a lot of time.
+You still haven't reached the exit!
