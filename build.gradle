@@ -19,6 +19,9 @@ javafx {
 application {
   mainModule = 'game.labyrinthstudy'
   mainClass = 'game.labyrinthstudy.MainApplication'
+  applicationDefaultJvmArgs = [
+          '-Dprism.allowhidpi=false' // Forces software rendering
+  ]
 }
 
 dependencies {
@@ -37,7 +40,7 @@ jlink {
 
   launcher {
     name = 'MazeStudy'
-    jvmArgs = []
+    jvmArgs = ['-Dprism.order=sw']
   }
 
   jpackage {

@@ -197,6 +197,7 @@ public class StudyFlowManager implements TickListener {
     @Override
     public void tick() {
         if (this.currentMaze == null) return;
+        if (!this.recorders.containsKey(this.currentMaze)) return;
         StatsRecorder recorder = this.recorders.get(this.currentMaze);
         recorder.updateTime();
     }
